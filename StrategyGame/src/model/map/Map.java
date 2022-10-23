@@ -1,5 +1,7 @@
-package model;
+package model.map;
 
+import model.field.FieldType;
+import model.field.Field;
 import java.awt.Point;
 import java.io.InputStream;
 import java.util.Scanner;

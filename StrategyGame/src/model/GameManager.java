@@ -1,5 +1,8 @@
 package model;
 
+import model.map.Map;
+import model.player.Player;
+import model.field.Field;
 import java.awt.Point;
 
 public class GameManager {

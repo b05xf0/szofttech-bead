@@ -1,6 +1,8 @@
-package model;
+package model.field;
 
 import java.awt.Point;
+import model.map.Map;
+import model.map.Orientation;
 
 public class Field {
 

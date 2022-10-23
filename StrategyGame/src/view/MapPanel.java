@@ -9,7 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import javax.swing.JPanel;
-import model.Field;
+import model.field.Field;
 
 import model.GameManager;
 import resources.ResourceLoader;
