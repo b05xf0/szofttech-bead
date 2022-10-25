@@ -34,16 +34,4 @@ public class Swordsman extends Warrior implements IMovable {
     public boolean canFly() {
         return false;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        
-        if(!(o instanceof Swordsman)) return false;
-        
-        Swordsman sm = (Swordsman)o;
-        
-        return sm.getPosition().equals(this.getPosition())
-                && sm.getPlayer().equals(this.getPlayer());
-    }
 }

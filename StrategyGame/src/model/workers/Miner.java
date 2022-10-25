@@ -29,16 +29,4 @@ public class Miner extends Worker {
     public Mine buildMine(){
         return new Mine(this.getPosition(), this.getPlayer());
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        
-        if(!(o instanceof Miner)) return false;
-        
-        Miner m = (Miner)o;
-        
-        return m.getPosition().equals(this.getPosition())
-                && m.getPlayer().equals(this.getPlayer());
-    }
 }

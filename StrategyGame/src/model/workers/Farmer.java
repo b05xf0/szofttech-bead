@@ -28,16 +28,4 @@ public class Farmer extends Worker {
     public Farm buildFarm(){
         return new Farm(this.getPosition(), this.getPlayer());
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        
-        if(!(o instanceof Miner)) return false;
-        
-        Farmer f = (Farmer)o;
-        
-        return f.getPosition().equals(this.getPosition())
-                && f.getPlayer().equals(this.getPlayer());
-    }
 }

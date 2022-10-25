@@ -34,16 +34,4 @@ public class Peasant extends Warrior implements IMovable {
     public boolean canFly() {
         return false;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        
-        if(!(o instanceof Peasant)) return false;
-        
-        Peasant p = (Peasant)o;
-        
-        return p.getPosition().equals(this.getPosition())
-                && p.getPlayer().equals(this.getPlayer());
-    }
 }

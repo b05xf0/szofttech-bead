@@ -34,16 +34,4 @@ public class Knight extends Warrior implements IMovable {
     public boolean canFly() {
         return false;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        
-        if(!(o instanceof Knight)) return false;
-        
-        Knight k = (Knight)o;
-        
-        return k.getPosition().equals(this.getPosition())
-                && k.getPlayer().equals(this.getPlayer());
-    }
 }

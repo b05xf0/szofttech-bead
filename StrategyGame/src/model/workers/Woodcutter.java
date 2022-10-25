@@ -29,16 +29,4 @@ public class Woodcutter extends Worker {
     public Hut buildHut(){
         return new Hut(this.getPosition(), this.getPlayer());
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        
-        if(!(o instanceof Miner)) return false;
-        
-        Woodcutter wc = (Woodcutter)o;
-        
-        return wc.getPosition().equals(this.getPosition())
-                && wc.getPlayer().equals(this.getPlayer());
-    }
 }

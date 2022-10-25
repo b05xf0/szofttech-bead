@@ -34,16 +34,4 @@ public class Dragon extends Warrior implements IMovable {
     public boolean canFly() {
         return true;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        
-        if(!(o instanceof Dragon)) return false;
-        
-        Dragon d = (Dragon)o;
-        
-        return d.getPosition().equals(this.getPosition())
-                && d.getPlayer().equals(this.getPlayer());
-    }
 }
