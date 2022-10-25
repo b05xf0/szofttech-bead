@@ -4,9 +4,9 @@
  */
 package model.extractors;
 
+import java.awt.Point;
 import model.common.AttrLevel;
 import model.player.Player;
-import model.common.Position;
 import model.common.Stock;
 import model.common.Unit;
 import model.interfaces.IMovable;
@@ -21,7 +21,7 @@ public abstract class Extractor extends Unit{
     private int headCount;
     protected final AttrLevel DEFENCE;
     
-    protected Extractor(Position position, Player player) {
+    protected Extractor(Point position, Player player) {
         super(AttrLevel.LOW.getValue(), position, player);
         
         this.DEFENCE = AttrLevel.LOW;

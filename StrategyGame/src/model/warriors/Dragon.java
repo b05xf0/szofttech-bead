@@ -5,7 +5,7 @@
 package model.warriors;
 
 import model.common.AttrLevel;
-import model.common.Position;
+import java.awt.Point;
 import model.common.Stock;
 import model.interfaces.IMovable;
 import model.player.Player;
@@ -16,7 +16,7 @@ import model.player.Player;
  */
 public class Dragon extends Warrior implements IMovable {
     
-    public Dragon(Position position, Player player) {
+    public Dragon(Point position, Player player) {
         super(AttrLevel.HIGHEST.getValue(), position, player);
         
         this.HP = AttrLevel.HIGHEST;

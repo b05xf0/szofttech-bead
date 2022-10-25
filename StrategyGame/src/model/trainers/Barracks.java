@@ -6,7 +6,7 @@ package model.trainers;
 
 import model.common.AttrLevel;
 import model.player.Player;
-import model.common.Position;
+import java.awt.Point;
 import model.common.Stock;
 import model.warriors.Dragon;
 import model.warriors.Knight;
@@ -19,7 +19,7 @@ import model.warriors.Swordsman;
  */
 public class Barracks extends Trainer{
     
-    public Barracks(Position position, Player player) {
+    public Barracks(Point position, Player player) {
         super(AttrLevel.MEDIUM.getValue(), position, player);
         
         this.HP = AttrLevel.MEDIUM;

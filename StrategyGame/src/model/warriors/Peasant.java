@@ -5,7 +5,7 @@
 package model.warriors;
 
 import model.common.AttrLevel;
-import model.common.Position;
+import java.awt.Point;
 import model.common.Stock;
 import model.interfaces.IMovable;
 import model.player.Player;
@@ -16,7 +16,7 @@ import model.player.Player;
  */
 public class Peasant extends Warrior implements IMovable {
 
-    public Peasant(Position position, Player player) {
+    public Peasant(Point position, Player player) {
         super(AttrLevel.LOW.getValue(), position, player);
         
         this.HP = AttrLevel.LOW;

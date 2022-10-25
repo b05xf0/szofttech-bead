@@ -8,7 +8,7 @@ import model.common.AttrLevel;
 import model.extractors.Farm;
 import model.field.FieldType;
 import model.player.Player;
-import model.common.Position;
+import java.awt.Point;
 import model.workers.Worker;
 
 /**
@@ -17,7 +17,7 @@ import model.workers.Worker;
  */
 public class Farmer extends Worker {
 
-    public Farmer(Position position, Player player) {
+    public Farmer(Point position, Player player) {
         super(AttrLevel.LOW.getValue(), position, player);
     }
     

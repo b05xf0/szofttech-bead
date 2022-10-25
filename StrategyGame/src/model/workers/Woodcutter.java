@@ -8,7 +8,7 @@ import model.common.AttrLevel;
 import model.field.FieldType;
 import model.extractors.Hut;
 import model.player.Player;
-import model.common.Position;
+import java.awt.Point;
 import model.workers.Miner;
 import model.workers.Worker;
 
@@ -18,7 +18,7 @@ import model.workers.Worker;
  */
 public class Woodcutter extends Worker {
 
-    public Woodcutter(Position position, Player player) {
+    public Woodcutter(Point position, Player player) {
         super(AttrLevel.LOW.getValue(), position, player);
     }
     

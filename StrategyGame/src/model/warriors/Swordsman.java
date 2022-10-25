@@ -5,7 +5,7 @@
 package model.warriors;
 
 import model.common.AttrLevel;
-import model.common.Position;
+import java.awt.Point;
 import model.common.Stock;
 import model.interfaces.IMovable;
 import model.player.Player;
@@ -16,7 +16,7 @@ import model.player.Player;
  */
 public class Swordsman extends Warrior implements IMovable {
 
-    public Swordsman(Position position, Player player) {
+    public Swordsman(Point position, Player player) {
         super(AttrLevel.MEDIUM.getValue(), position, player);
         
         this.HP = AttrLevel.MEDIUM;

@@ -10,7 +10,7 @@ import model.trainers.Castle;
 import model.field.FieldType;
 import model.interfaces.IMovable;
 import model.player.Player;
-import model.common.Position;
+import java.awt.Point;
 import model.common.Stock;
 import model.common.Unit;
 
@@ -24,7 +24,7 @@ public abstract class Worker extends Unit implements IMovable {
     private final AttrLevel DEFENCE;
     private final AttrLevel MOVEMENT;
 
-    protected Worker(int health, Position position, Player player) {
+    protected Worker(int health, Point position, Player player) {
         super(health, position, player);
         
         this.HP = AttrLevel.LOW;
@@ -37,7 +37,7 @@ public abstract class Worker extends Unit implements IMovable {
         return new Stock(1, 0, 2);
     }
     
-    public int move(Position pos){
+    public int move(Point pos){
         this.position = pos;
         return this.MOVEMENT.getValue();
     }

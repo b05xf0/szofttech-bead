@@ -6,7 +6,7 @@ package model.trainers;
 
 import model.common.AttrLevel;
 import model.player.Player;
-import model.common.Position;
+import java.awt.Point;
 import model.common.Stock;
 import model.workers.Farmer;
 import model.workers.Miner;
@@ -19,7 +19,7 @@ import model.workers.Woodcutter;
 public class Castle extends Trainer {
     
     
-    public Castle(Position position, Player player) {
+    public Castle(Point position, Player player) {
         super(AttrLevel.HIGH.getValue(), position, player);
     }
     

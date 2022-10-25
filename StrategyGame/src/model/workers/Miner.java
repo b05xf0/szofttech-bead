@@ -8,7 +8,7 @@ import model.common.AttrLevel;
 import model.field.FieldType;
 import model.extractors.Mine;
 import model.player.Player;
-import model.common.Position;
+import java.awt.Point;
 import model.workers.Worker;
 
 /**
@@ -17,7 +17,7 @@ import model.workers.Worker;
  */
 public class Miner extends Worker {
     
-    public Miner(Position position, Player player){
+    public Miner(Point position, Player player){
         super(AttrLevel.LOW.getValue(), position, player);
     }
     

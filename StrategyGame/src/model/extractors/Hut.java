@@ -7,7 +7,7 @@ package model.extractors;
 import model.common.AttrLevel;
 import model.interfaces.IMovable;
 import model.player.Player;
-import model.common.Position;
+import java.awt.Point;
 import model.common.Stock;
 import model.extractors.Extractor;
 
@@ -19,7 +19,7 @@ public class Hut extends Extractor {
 
     private final Stock RESOURCES;
     
-    public Hut(Position position, Player player) {
+    public Hut(Point position, Player player) {
         super(position, player);
         
         this.RESOURCES = new Stock(0, 999, 0);

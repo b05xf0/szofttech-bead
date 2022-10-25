@@ -4,7 +4,7 @@
  */
 package model.interfaces;
 
-import model.common.Position;
+import java.awt.Point;
 import model.common.Unit;
 
 /**
@@ -12,7 +12,7 @@ import model.common.Unit;
  * @author sonrisa
  */
 public interface IMovable {
-    public int move(Position position);
+    public int move(Point position);
     public void attack(Unit unit);
     public int getAttackValue();
     public int getMovementCost();

@@ -5,7 +5,7 @@
 package model.trainers;
 
 import model.common.AttrLevel;
-import model.common.Position;
+import java.awt.Point;
 import model.common.Unit;
 import model.interfaces.IMovable;
 import model.player.Player;
@@ -19,7 +19,7 @@ public abstract class Trainer extends Unit{
     protected AttrLevel HP;
     protected AttrLevel DEFENCE;
         
-    protected Trainer(int health, Position position, Player player) {
+    protected Trainer(int health, Point position, Player player) {
         super(health, position, player);
     }
     
