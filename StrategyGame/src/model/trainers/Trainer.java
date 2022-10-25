@@ -5,17 +5,21 @@
 package model.trainers;
 
 import java.awt.Point;
-import model.player.Player;
+import model.common.AttrLevel;
 import model.common.Position;
+import model.common.Stock;
+import model.common.Unit;
+import model.player.Player;
 
 /**
  *
- * @author sonrisa
+ * @author laszl
  */
-public class Barracks {
+public abstract class Trainer extends Unit{
 
-    public Barracks(Point position, Player player) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    
+    protected Trainer(int health, Point position, Player player) {
+        super(health, position, player);
     }
     
 }

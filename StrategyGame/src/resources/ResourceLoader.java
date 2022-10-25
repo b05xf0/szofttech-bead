@@ -11,8 +11,10 @@ public class ResourceLoader {
         return ResourceLoader.class.getClassLoader().getResourceAsStream(resName);
     }
     
-    public static Image loadImage(String resName) throws IOException{
+    public static Image loadImage(String resName){
         URL url = ResourceLoader.class.getClassLoader().getResource(resName);
-        return ImageIO.read(url);
+          try {return ImageIO.read(url); }
+        catch(IOException e){ return null;}
+       
     }
 }

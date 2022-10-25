@@ -4,6 +4,7 @@
  */
 package model.warriors;
 
+import java.awt.Point;
 import model.common.AttrLevel;
 import model.player.Player;
 import model.common.Position;
@@ -22,7 +23,7 @@ public abstract class Warrior extends Unit implements IMovable {
     protected AttrLevel DEFENCE;
     protected AttrLevel MOVEMENT;
 
-    protected Warrior(int health, Position position, Player player) {
+    protected Warrior(int health, Point position, Player player) {
         super(health, position, player);
     }
     
@@ -42,7 +43,7 @@ public abstract class Warrior extends Unit implements IMovable {
         return this.MOVEMENT.getValue();
     }
     
-    public int move(Position pos){
+    public int move(Point pos){
         this.position = pos;
         return this.MOVEMENT.getValue();
     }

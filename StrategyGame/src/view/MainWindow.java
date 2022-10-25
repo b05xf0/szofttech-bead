@@ -1,7 +1,10 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -10,6 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -27,8 +31,12 @@ public class MainWindow extends JFrame {
     private final GameManager game;
     
     private final MapPanel map;
-    private final ControlPanel ctrl;
-
+    
+    private final CardPanel gameInfo;
+    private final CardPanel playerInfo;
+    private final CardPanel fieldInfo;
+    private final JButton endTurnButton;
+    private final JPanel ctrl;
     
     public MainWindow() throws IOException {
         game = new GameManager();
@@ -48,12 +56,14 @@ public class MainWindow extends JFrame {
         setJMenuBar(createMenuBar());
 
         getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(map = createMapPanel(), BorderLayout.EAST);
-        
-        ctrl = new ControlPanel(game);
-
-        getContentPane().add(ctrl, BorderLayout.WEST);
-        
+        map = createMapPanel();
+        gameInfo = new CardPanel();
+        playerInfo = new CardPanel();
+        fieldInfo = new CardPanel();
+        endTurnButton = new JButton("End Turn");
+        ctrl = createControlPanel();
+        getContentPane().add(ctrl, BorderLayout.LINE_START);
+        getContentPane().add(map, BorderLayout.LINE_END);
         setExtendedState( JFrame.MAXIMIZED_BOTH );
         //setResizable(false);
         setMinimumSize(new Dimension(map.getTileDim()*game.getMap().getSize() * 4 / 3, map.getTileDim()*game.getMap().getSize()));
@@ -109,6 +119,7 @@ public class MainWindow extends JFrame {
     private void startGame(){
         showSettings();
         game.start();
+        ctrl.setVisible(true);
     }
     
     private JMenuBar createMenuBar(){
@@ -142,7 +153,7 @@ public class MainWindow extends JFrame {
                         case SELECTFIELD -> {
                             game.selectField(map.getPosition(e.getX(),e.getY()));
                             map.repaint();
-                            ctrl.refresh();
+                            //ctrl.refresh();
                         }
                         default -> {}
                     }
@@ -150,6 +161,22 @@ public class MainWindow extends JFrame {
                 }
             });
         return mapPanel;
+    }
+    
+    private JPanel createControlPanel() {
+        JPanel ctrlPanel = new JPanel();
+        ctrlPanel.setVisible(false);
+        ctrlPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+        gameInfo.add(endTurnButton,BorderLayout.LINE_END);
+        ctrlPanel.add(gameInfo);
+        ctrlPanel.add(playerInfo);
+        ctrlPanel.add(fieldInfo);
+        endTurnButton.addActionListener((ActionEvent e) -> {
+            game.endTurn();
+            map.repaint();
+            
+        });
+        return ctrlPanel;
     }
     
     public static void main(String[] args) throws IOException {

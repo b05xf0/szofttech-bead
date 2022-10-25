@@ -1,24 +1,23 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
+import static java.lang.Math.min;
 import javax.swing.JPanel;
 import model.field.Field;
-
 import model.GameManager;
 import resources.ResourceLoader;
 
 public class MapPanel extends JPanel {
-    private final static String TILESET_PATH = "resources/tileset.png";
+    
+    private final static Image TILESET = ResourceLoader.loadImage("resources/tileset.png");
     private final static int TILE_DIM = 16;
     private final GameManager game;
-    private final Image tileSet;
     private int tileSize;
     private int offsetX;
     private int offsetY;
@@ -47,15 +46,13 @@ public class MapPanel extends JPanel {
     }
     
     public MapPanel(GameManager game) throws IOException{
-        tileSet = ResourceLoader.loadImage(TILESET_PATH);
         this.game = game;
-        
 
     }
     
     private void drawTile(Graphics2D g, TileType t, int x, int y){
         g.drawImage(
-            tileSet,
+            TILESET,
             tileSize * x + offsetX,
             tileSize * y + offsetY,
             tileSize * (x + 1) + offsetX,
@@ -68,7 +65,9 @@ public class MapPanel extends JPanel {
         );
     }
     
-    public Point getPosition(int x, int y) { return new Point((x-offsetX) / tileSize,(y - offsetY) / tileSize); }
+    public Point getPosition(int x, int y) {
+        return new Point(min((x-offsetX) / tileSize,game.getMap().getSize()-1),min((y - offsetY) / tileSize,game.getMap().getSize()-1));
+    }
     
     public int getTileDim(){return TILE_DIM;}
     
@@ -83,9 +82,10 @@ public class MapPanel extends JPanel {
         super.paintComponent(gr);
         Graphics2D g = (Graphics2D) gr;
         int mapSize = game.getMap().getSize();
-        tileSize = getHeight() / mapSize;
+        tileSize = getHeight() / (mapSize + 1);
         offsetX = (getWidth() - mapSize * tileSize) / 2;
         offsetY = (getHeight() - mapSize * tileSize) / 2;
+         
 
         for (int i = 0; i < mapSize; ++i) {
             for (int j = 0; j < mapSize; ++j) {
@@ -159,8 +159,6 @@ public class MapPanel extends JPanel {
                     default -> tileType = TileType.EMPTY;
                     
                 }
-                drawTile(g,tileType,i,j);
-                if (field.equals(game.getSelectedField())) drawTile(g,TileType.SELECTION,i,j);
                 
                 // only for test purpose
                 if (field.equals(game.getMap().getField(game.getMap().getStartingPosition(0)))) {
@@ -171,7 +169,9 @@ public class MapPanel extends JPanel {
                     drawTile(g,TileType.CASTLE_2,i,j);
                     drawTile(g,TileType.UNIT_SMALL_2,i,j);
                 }
-            
+
+                drawTile(g,tileType,i,j);
+                if (field.equals(game.getSelectedField())) drawTile(g,TileType.SELECTION,i,j);
             
             }
         }

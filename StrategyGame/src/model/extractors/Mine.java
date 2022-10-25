@@ -4,6 +4,7 @@
  */
 package model.extractors;
 
+import java.awt.Point;
 import model.common.AttrLevel;
 import model.interfaces.IMovable;
 import model.player.Player;
@@ -19,7 +20,7 @@ public class Mine extends Extractor {
     
     private final Stock RESOURCES;
 
-    public Mine(Position position, Player player) {
+    public Mine(Point position, Player player) {
         super(AttrLevel.MEDIUM.getValue(), position, player);
         
         this.RESOURCES = new Stock(999, 0, 0);

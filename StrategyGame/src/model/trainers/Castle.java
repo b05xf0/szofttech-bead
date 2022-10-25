@@ -4,17 +4,20 @@
  */
 package model.trainers;
 
+import java.awt.Point;
+import model.common.AttrLevel;
+import model.common.Stock;
 import model.player.Player;
-import model.common.Position;
 
 /**
  *
  * @author sonrisa
  */
 public class Castle {
+    public AttrLevel HP = AttrLevel.HIGH;
+    
 
-    public Castle(Position position, Player player) {
+    public Castle(Point position, Player player) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
 }

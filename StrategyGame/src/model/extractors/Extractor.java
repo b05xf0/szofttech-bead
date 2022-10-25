@@ -4,9 +4,9 @@
  */
 package model.extractors;
 
+import java.awt.Point;
 import model.common.AttrLevel;
 import model.player.Player;
-import model.common.Position;
 import model.common.Stock;
 import model.common.Unit;
 
@@ -18,7 +18,7 @@ public abstract class Extractor extends Unit {
 
     private final AttrLevel HP;
     
-    protected Extractor(int health, Position position, Player player) {
+    protected Extractor(int health, Point position, Player player) {
         super(health, position, player);
         
         this.HP = AttrLevel.MEDIUM; // TODO
