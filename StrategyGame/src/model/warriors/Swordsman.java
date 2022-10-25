@@ -16,7 +16,7 @@ import model.player.Player;
  */
 public class Swordsman extends Warrior implements IMovable {
 
-    public Swordsman(int health, Position position, Player player) {
+    public Swordsman(Position position, Player player) {
         super(AttrLevel.MEDIUM.getValue(), position, player);
         
         this.HP = AttrLevel.MEDIUM;

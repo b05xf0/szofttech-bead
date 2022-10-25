@@ -15,7 +15,8 @@ import model.player.Player;
  * @author sonrisa
  */
 public class Knight extends Warrior implements IMovable {
-    public Knight(int health, Position position, Player player) {
+    
+    public Knight(Position position, Player player) {
         super(AttrLevel.HIGH.getValue(), position, player);
         
         this.HP = AttrLevel.HIGH;

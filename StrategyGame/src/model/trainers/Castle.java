@@ -4,17 +4,48 @@
  */
 package model.trainers;
 
+import model.common.AttrLevel;
 import model.player.Player;
 import model.common.Position;
+import model.common.Stock;
+import model.workers.Farmer;
+import model.workers.Miner;
+import model.workers.Woodcutter;
 
 /**
  *
  * @author sonrisa
  */
-public class Castle {
-
+public class Castle extends Trainer {
+    
+    
     public Castle(Position position, Player player) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        super(AttrLevel.HIGH.getValue(), position, player);
     }
     
+    public Stock cost() {
+        return new Stock(10, 8, 0);
+    }
+    
+    @Override
+    public boolean isHQ() {
+        return false;
+    }
+    
+    @Override
+    public boolean canTrainWorker() {
+        return false;
+    }
+    
+    public Miner trainMiner() {
+        return new Miner(this.getPosition(), this.getPlayer());
+    }
+    
+    public Woodcutter trainWoodcutter() {
+        return new Woodcutter(this.getPosition(), this.getPlayer());
+    }
+    
+    public Farmer trainFarmer() {
+        return new Farmer(this.getPosition(), this.getPlayer());
+    }
 }

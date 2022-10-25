@@ -15,7 +15,8 @@ import model.player.Player;
  * @author sonrisa
  */
 public class Dragon extends Warrior implements IMovable {
-    public Dragon(int health, Position position, Player player) {
+    
+    public Dragon(Position position, Player player) {
         super(AttrLevel.HIGHEST.getValue(), position, player);
         
         this.HP = AttrLevel.HIGHEST;

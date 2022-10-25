@@ -20,29 +20,14 @@ public class Mine extends Extractor {
     private final Stock RESOURCES;
 
     public Mine(Position position, Player player) {
-        super(AttrLevel.MEDIUM.getValue(), position, player);
+        super(position, player);
         
         this.RESOURCES = new Stock(999, 0, 0);
     }
 
     @Override
-    protected Stock getResources() {
+    public Stock getResources() {
         return this.RESOURCES;
-    }
-
-    @Override
-    public void defend(IMovable m) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Stock extract() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }

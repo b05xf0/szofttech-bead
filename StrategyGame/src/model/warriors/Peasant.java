@@ -16,7 +16,7 @@ import model.player.Player;
  */
 public class Peasant extends Warrior implements IMovable {
 
-    public Peasant(int health, Position position, Player player) {
+    public Peasant(Position position, Player player) {
         super(AttrLevel.LOW.getValue(), position, player);
         
         this.HP = AttrLevel.LOW;
