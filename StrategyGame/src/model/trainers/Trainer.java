@@ -4,22 +4,50 @@
  */
 package model.trainers;
 
-import java.awt.Point;
+
 import model.common.AttrLevel;
-import model.common.Position;
-import model.common.Stock;
+import java.awt.Point;
 import model.common.Unit;
+import model.interfaces.IMovable;
 import model.player.Player;
 
 /**
  *
- * @author laszl
+ * @author sonrisa
  */
 public abstract class Trainer extends Unit{
-
     
+    protected AttrLevel HP;
+    protected AttrLevel DEFENCE;
+        
     protected Trainer(int health, Point position, Player player) {
         super(health, position, player);
     }
     
+    public void defend(IMovable m){
+        this.health -= Math.abs(this.DEFENCE.getValue() - m.getAttackValue());
+    }
+    
+    public boolean isHQ() {
+        return false;
+    }
+    public boolean canTrainWorker() {
+        return false;
+    }
+    
+    public boolean canTrainPeasant() {
+        return false;
+    }
+    
+    public boolean canTrainSwordsman() {
+        return false;
+    }
+    
+    public boolean canTrainKnight() {
+        return false;
+    }
+    
+    public boolean canTrainDragon() {
+        return false;
+    }
 }

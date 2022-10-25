@@ -8,7 +8,7 @@ import java.awt.Point;
 import model.common.AttrLevel;
 import model.interfaces.IMovable;
 import model.player.Player;
-import model.common.Position;
+import java.awt.Point;
 import model.common.Stock;
 import model.extractors.Extractor;
 
@@ -21,28 +21,14 @@ public class Farm extends Extractor {
     private final Stock RESOURCES;
 
     public Farm(Point position, Player player) {
-        super(AttrLevel.MEDIUM.getValue(), position, player);
+
+        super(position, player);
         
         this.RESOURCES = new Stock(0, 0, 999);
     }
 
     @Override
-    protected Stock getResources() {
+    public Stock getResources() {
         return this.RESOURCES;
-    }
-
-    @Override
-    public void defend(IMovable m) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Stock extract() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

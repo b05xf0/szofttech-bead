@@ -41,22 +41,28 @@ public class Stock {
         return this.food;
     }
     
-    public void increment(Stock s){
+    public Stock increment(Stock s){
         this.gold += s.getGold();
         this.lumber += s.getLumber();
         this.food += s.getFood();
+        
+        return this;
     }
     
-    public void decrement(Stock s){
+    public Stock decrement(Stock s){
         this.gold -= s.getGold();
         this.lumber -= s.getLumber();
         this.food -= s.getFood();
+        
+        return this;
     }
     
-    public void multiply(int amount){
+    public Stock multiply(int amount){
         this.gold *= amount;
         this.lumber *= amount;
         this.food *= amount;
+        
+        return this;
     }
     
     public void init(){

@@ -7,7 +7,7 @@ package model.warriors;
 import java.awt.Point;
 import model.common.AttrLevel;
 import model.player.Player;
-import model.common.Position;
+import java.awt.Point;
 import model.common.Stock;
 import model.common.Unit;
 import model.interfaces.IMovable;

@@ -8,7 +8,7 @@ import model.common.AttrLevel;
 import model.field.FieldType;
 import model.extractors.Mine;
 import model.player.Player;
-import model.common.Position;
+import java.awt.Point;
 import model.workers.Worker;
 
 /**
@@ -17,7 +17,7 @@ import model.workers.Worker;
  */
 public class Miner extends Worker {
     
-    public Miner(Position position, Player player){
+    public Miner(Point position, Player player){
         super(AttrLevel.LOW.getValue(), position, player);
     }
     
@@ -28,17 +28,5 @@ public class Miner extends Worker {
     
     public Mine buildMine(){
         return new Mine(this.getPosition(), this.getPlayer());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        
-        if(!(o instanceof Miner)) return false;
-        
-        Miner m = (Miner)o;
-        
-        return m.getPosition().equals(this.getPosition())
-                && m.getPlayer().equals(this.getPlayer());
     }
 }

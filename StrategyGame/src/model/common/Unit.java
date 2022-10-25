@@ -47,7 +47,5 @@ public abstract class Unit {
     public abstract void defend(IMovable m);
     
     public abstract Stock cost();
-    
-    
-    //public abstract boolean equals(Object o);
+
 }
