@@ -4,31 +4,41 @@
  */
 package model.extractors;
 
+import java.awt.Point;
 import model.common.AttrLevel;
 import model.player.Player;
-import model.common.Position;
 import model.common.Stock;
 import model.common.Unit;
+import model.interfaces.IMovable;
 
 /**
  *
  * @author sonrisa
  */
-public abstract class Extractor extends Unit {
-
-    private final AttrLevel HP;
+public abstract class Extractor extends Unit{
     
-    protected Extractor(int health, Position position, Player player) {
-        super(health, position, player);
+    private AttrLevel HP;
+    private int headCount;
+    protected final AttrLevel DEFENCE;
+    
+    protected Extractor(Point position, Player player) {
+        super(AttrLevel.LOW.getValue(), position, player);
         
-        this.HP = AttrLevel.MEDIUM; // TODO
+        this.DEFENCE = AttrLevel.LOW;
+        this.HP = AttrLevel.MEDIUM;
     }
     
-    protected abstract Stock getResources();
-    
-    public Stock cost(){
-        return new Stock(3, 4, 0);
+    public Stock cost() {
+        return new Stock(4, 3, 0);
     }
     
-    public abstract Stock extract();
+    public Stock extract (int x) {
+        return this.getResources().multiply(x);
+    }
+    
+    public void defend(IMovable m){
+        this.health -= Math.abs(this.DEFENCE.getValue() - m.getAttackValue());
+    }
+    
+    public abstract Stock getResources();
 }

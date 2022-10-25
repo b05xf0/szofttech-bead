@@ -4,6 +4,7 @@
  */
 package model.common;
 
+import java.awt.Point;
 import model.player.Player;
 import model.common.Stock;
 import model.interfaces.IMovable;
@@ -16,12 +17,12 @@ public abstract class Unit {
     private final Player player;
     private UnitState state;
     private int stateTimer;
-    protected Position position;
+    protected Point position;
     protected int health;
     
-    protected Unit(int health, Position position, Player player){
+    protected Unit(int health, Point position, Player player){
         this.health = health;
-        this.position = new Position(position);
+        this.position = new Point(position);
         this.player = player;
         
         this.state = UnitState.READY;
@@ -31,7 +32,7 @@ public abstract class Unit {
         return this.health;
     }
     
-    public Position getPosition(){
+    public Point getPosition(){
         return this.position;
     }
     
@@ -46,6 +47,4 @@ public abstract class Unit {
     public abstract void defend(IMovable m);
     
     public abstract Stock cost();
-    
-    public abstract boolean equals(Object o);
 }

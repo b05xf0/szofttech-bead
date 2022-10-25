@@ -5,7 +5,7 @@
 package model.warriors;
 
 import model.common.AttrLevel;
-import model.common.Position;
+import java.awt.Point;
 import model.common.Stock;
 import model.interfaces.IMovable;
 import model.player.Player;
@@ -15,7 +15,8 @@ import model.player.Player;
  * @author sonrisa
  */
 public class Dragon extends Warrior implements IMovable {
-    public Dragon(int health, Position position, Player player) {
+    
+    public Dragon(Point position, Player player) {
         super(AttrLevel.HIGHEST.getValue(), position, player);
         
         this.HP = AttrLevel.HIGHEST;
@@ -32,17 +33,5 @@ public class Dragon extends Warrior implements IMovable {
     @Override
     public boolean canFly() {
         return true;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        
-        if(!(o instanceof Dragon)) return false;
-        
-        Dragon d = (Dragon)o;
-        
-        return d.getPosition().equals(this.getPosition())
-                && d.getPlayer().equals(this.getPlayer());
     }
 }
