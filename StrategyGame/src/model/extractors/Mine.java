@@ -3,14 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model.extractors;
-
-import java.awt.Point;
-import model.common.AttrLevel;
-import model.interfaces.IMovable;
 import model.player.Player;
-import java.awt.Point;
 import model.common.Stock;
-import model.extractors.Extractor;
+import model.common.UnitType;
+import model.field.Field;
 
 /**
  *
@@ -18,18 +14,21 @@ import model.extractors.Extractor;
  */
 public class Mine extends Extractor {
     
-    private final Stock RESOURCES;
+    private static final Stock RESOURCES = new Stock(10,0,0);
 
-    public Mine(Point position, Player player) {
-
+    public Mine(Field position, Player player) {
         super(position, player);
-        
-        this.RESOURCES = new Stock(999, 0, 0);
+        type = UnitType.MINE;
     }
 
     @Override
     public Stock getResources() {
-        return this.RESOURCES;
+        return new Stock(RESOURCES);
+    }
+
+    @Override
+    public int getHC() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }

@@ -7,8 +7,9 @@ package model.trainers;
 
 import model.common.AttrLevel;
 import model.player.Player;
-import java.awt.Point;
-import model.common.Stock;
+import model.common.UnitState;
+import model.common.UnitType;
+import model.field.Field;
 import model.warriors.Dragon;
 import model.warriors.Knight;
 import model.warriors.Peasant;
@@ -20,16 +21,18 @@ import model.warriors.Swordsman;
  */
 
 public class Barracks extends Trainer{
+    public static final AttrLevel HP = AttrLevel.MEDIUM;
+    private static final int BASEHEALTH = 100;
     
-    public Barracks(Point position, Player player) {
-        super(AttrLevel.MEDIUM.getValue(), position, player);
-        
-        this.HP = AttrLevel.MEDIUM;
-        this.DEFENCE = AttrLevel.MEDIUM;
+    public Barracks(Field position, Player player) {
+        super(HP.getValue() * BASEHEALTH, position, player);
+        this.timer = HP.getValue();
+        type = UnitType.BARRACKS;
     }
    
-    public Stock cost() {
-        return new Stock(5, 6, 0);
+    @Override
+    public final int getHPValue() {
+        return HP.getValue();
     }
     
     @Override
@@ -54,18 +57,22 @@ public class Barracks extends Trainer{
     }
     
     public Peasant trainPeasant() {
-        return new Peasant(this.getPosition(), this.getPlayer());
+        setTimer(Peasant.HP.getValue());
+        return new Peasant(position, player);
     }
     
     public Swordsman trainSwordsman() {
-        return new Swordsman(this.getPosition(), this.getPlayer());
+        setTimer(Swordsman.HP.getValue());
+        return new Swordsman(position, player);
     }
     
     public Knight trainKnight() {
-        return new Knight(this.getPosition(), this.getPlayer());
+        setTimer(Knight.HP.getValue());
+        return new Knight(position, player);
     }
     
     public Dragon trainDragon() {
-        return new Dragon(this.getPosition(), this.getPlayer());
+        setTimer(Dragon.HP.getValue());
+        return new Dragon(position, player);
     }
 }

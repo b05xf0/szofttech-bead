@@ -5,8 +5,8 @@
 package model.warriors;
 
 import model.common.AttrLevel;
-import java.awt.Point;
-import model.common.Stock;
+import model.common.UnitType;
+import model.field.Field;
 import model.interfaces.IMovable;
 import model.player.Player;
 
@@ -16,22 +16,34 @@ import model.player.Player;
  */
 public class Knight extends Warrior implements IMovable {
     
-    public Knight(Point position, Player player) {
-        super(AttrLevel.HIGH.getValue(), position, player);
-        
-        this.HP = AttrLevel.HIGH;
-        this.ATTACK = AttrLevel.HIGH;
-        this.DEFENCE = AttrLevel.HIGH;
-        this.MOVEMENT = AttrLevel.HIGH;
+    public static final AttrLevel HP = AttrLevel.HIGH;
+    public static final AttrLevel ATTACK = AttrLevel.HIGH;
+    public static final AttrLevel DEFENCE = AttrLevel.HIGH;
+    public static final AttrLevel MOVEMENT = AttrLevel.HIGH;   
+    
+    public Knight(Field position, Player player) {
+        super(HP.getValue() * BASEHEALTH, position, player);
+        this.timer = HP.getValue();
+        type = UnitType.KNIGHT;
     }
 
     @Override
-    public Stock cost() {
-        return new Stock(5, 0, 4);
+    public int getHPValue() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public boolean canFly() {
-        return false;
+    public int getAttackValue() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public int getDefenceValue(){
+        return DEFENCE.getValue();
+    }
+
+    @Override
+    public int getMovementCost() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -24,7 +24,10 @@ public class Stock {
         this.lumber = lumber;
         this.food = food;
     }
-
+    public Stock(Stock s) {
+        this(s.gold,s.lumber,s.food);
+    }
+    
     public Stock() {
         this(DEFAULT_GOLD,DEFAULT_LUMBER,DEFAULT_FOOD);
     }

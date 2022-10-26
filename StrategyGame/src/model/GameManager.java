@@ -47,8 +47,6 @@ public class GameManager {
         map.init();
         players[0].init();
         players[1].init();
-        
-        
         state = GameState.SELECTFIELD;
         //TODO
     }

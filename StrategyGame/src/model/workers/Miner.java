@@ -4,12 +4,11 @@
  */
 package model.workers;
 
-import model.common.AttrLevel;
+import model.common.UnitType;
 import model.field.FieldType;
 import model.extractors.Mine;
 import model.player.Player;
-import java.awt.Point;
-import model.workers.Worker;
+import model.field.Field;
 
 /**
  *
@@ -17,16 +16,18 @@ import model.workers.Worker;
  */
 public class Miner extends Worker {
     
-    public Miner(Point position, Player player){
-        super(AttrLevel.LOW.getValue(), position, player);
+    public Miner(Field position, Player player){
+        super(position, player);
+        type = UnitType.MINER;
     }
     
     @Override
-    public boolean canMine(FieldType fieldType){
-        return fieldType == FieldType.GOLD;
+    public boolean canMine(){
+        return position.getType() == FieldType.GOLD;
     }
     
     public Mine buildMine(){
-        return new Mine(this.getPosition(), this.getPlayer());
+        setTimer(Mine.HP.getValue());
+        return new Mine(position, player);
     }
 }

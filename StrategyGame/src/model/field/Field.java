@@ -1,27 +1,61 @@
 package model.field;
 
 import java.awt.Point;
+import java.util.LinkedList;
+import java.util.List;
+import model.extractors.Extractor;
 import model.map.Map;
 import model.map.Orientation;
+import model.trainers.Trainer;
+import model.warriors.Warrior;
+import model.workers.Worker;
 
 public class Field {
 
     private final Point pos;
     private final FieldType type;
     private final Map map;
-    private final int variant;
+    private int variant;
+    private Extractor extractor;
+    private Trainer trainer;
+    private final List<Worker> workers;
+    private final List<Warrior> warriors;
 
     
     public Field(Map map, Point pos, FieldType type){
-
         this.map = map;
         this.pos = pos;
         this.type = type;
-        this.variant = (int)(Math.random() * 100);
+        workers = new LinkedList<>();
+        warriors = new LinkedList<>();
+    }
+    
+    public void init(){
+        variant = (int)(Math.random() * 100);
+        workers.clear();
+        warriors.clear();
+        extractor = null;
+        trainer = null;
     }
     
     public FieldType getType() { return type; }
     public int getVariant() { return variant; }
+    
+    public List<Worker> getWorkers() { return workers; }
+    public List<Warrior> getWarriors() { return warriors; }
+    public Extractor getExtractor() { return extractor; }
+    public Trainer getTrainer() { return trainer; }
+    
+    public void addUnit(Extractor u) { extractor = u; }
+    public void addUnit(Trainer u) { trainer = u; }
+    public void addUnit(Warrior u) { warriors.add(u); }
+    public void addUnit(Worker u) { workers.add(u); }
+
+    public void removeUnit(Extractor u) { extractor = null; }
+    public void removeUnit(Trainer u) { trainer = null; }
+    public void removeUnit(Warrior u) { warriors.remove(u); }
+    public void removeUnit(Worker u) { workers.remove(u); }
+    
     public Field getFieldToNorth() { return map.getField(new Point(pos.x, pos.y - 1)); }
     public Field getFieldToSouth() { return map.getField(new Point(pos.x, pos.y + 1)); }
     public Field getFieldToEast() { return map.getField(new Point(pos.x + 1, pos.y)); }

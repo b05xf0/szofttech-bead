@@ -6,9 +6,10 @@ package model.trainers;
 
 
 import model.common.AttrLevel;
+import model.common.UnitState;
+import model.common.UnitType;
 import model.player.Player;
-import java.awt.Point;
-import model.common.Stock;
+import model.field.Field;
 import model.workers.Farmer;
 import model.workers.Miner;
 import model.workers.Woodcutter;
@@ -18,14 +19,18 @@ import model.workers.Woodcutter;
  * @author sonrisa
  */
 public class Castle extends Trainer {
+    public static final AttrLevel HP = AttrLevel.HIGH;
+    private static final int BASEHEALTH = 100;
     
-    
-    public Castle(Point position, Player player) {
-        super(AttrLevel.HIGH.getValue(), position, player);
+    public Castle(Field position, Player player) {
+        super(HP.getValue() * BASEHEALTH, position, player);
+        this.timer = HP.getValue();
+        type = UnitType.CASTLE;
     }
     
-    public Stock cost() {
-        return new Stock(10, 8, 0);
+    @Override
+    public final int getHPValue() {
+        return HP.getValue();
     }
     
     @Override
@@ -35,18 +40,18 @@ public class Castle extends Trainer {
     
     @Override
     public boolean canTrainWorker() {
-        return false;
+        return true;
     }
     
     public Miner trainMiner() {
-        return new Miner(this.getPosition(), this.getPlayer());
+        return new Miner(position, player);
     }
     
     public Woodcutter trainWoodcutter() {
-        return new Woodcutter(this.getPosition(), this.getPlayer());
+        return new Woodcutter(position, player);
     }
     
     public Farmer trainFarmer() {
-        return new Farmer(this.getPosition(), this.getPlayer());
+        return new Farmer(position, player);
     }
 }

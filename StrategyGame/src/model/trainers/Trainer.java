@@ -5,9 +5,10 @@
 package model.trainers;
 
 
-import model.common.AttrLevel;
-import java.awt.Point;
+import model.common.Stock;
 import model.common.Unit;
+import model.common.UnitState;
+import model.field.Field;
 import model.interfaces.IMovable;
 import model.player.Player;
 
@@ -17,20 +18,16 @@ import model.player.Player;
  */
 public abstract class Trainer extends Unit{
     
-    protected AttrLevel HP;
-    protected AttrLevel DEFENCE;
+    private static final Stock BASECOST = new Stock(100,100,0);
         
-    protected Trainer(int health, Point position, Player player) {
+    protected Trainer(int health, Field position, Player player) {
         super(health, position, player);
-    }
-    
-    public void defend(IMovable m){
-        this.health -= Math.abs(this.DEFENCE.getValue() - m.getAttackValue());
     }
     
     public boolean isHQ() {
         return false;
     }
+    
     public boolean canTrainWorker() {
         return false;
     }
@@ -50,4 +47,14 @@ public abstract class Trainer extends Unit{
     public boolean canTrainDragon() {
         return false;
     }
+    
+    @Override
+    public final void defend(IMovable m){
+        this.health -= m.getAttackValue();
+        if(this.health <= 0) this.state = UnitState.DEAD;
+    }
+    
+    @Override
+    public final Stock getBaseCost(){ return BASECOST; }
+    
 }

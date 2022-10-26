@@ -66,7 +66,7 @@ public class MainWindow extends JFrame {
         getContentPane().add(map, BorderLayout.LINE_END);
         setExtendedState( JFrame.MAXIMIZED_BOTH );
         //setResizable(false);
-        setMinimumSize(new Dimension(map.getTileDim()*game.getMap().getSize() * 4 / 3, map.getTileDim()*game.getMap().getSize()));
+        setMinimumSize(new Dimension(800,600));
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -120,6 +120,7 @@ public class MainWindow extends JFrame {
         showSettings();
         game.start();
         ctrl.setVisible(true);
+        map.repaint();
     }
     
     private JMenuBar createMenuBar(){
@@ -183,159 +184,3 @@ public class MainWindow extends JFrame {
         MainWindow window = new MainWindow();
     }
 }
-
-
-/*
-public class AspectRatio {
-    public static void main(String[] args) {
-        final JPanel innerPanel = new JPanel();
-        innerPanel.setBackground(Color.YELLOW);
-
-        final JPanel container = new JPanel(new GridBagLayout());
-        container.add(innerPanel);
-        container.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                resizePreview(innerPanel, container);
-            }
-        });
-        final JFrame frame = new JFrame("AspectRatio");
-        frame.getContentPane().add(container);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 600);
-        frame.setVisible(true);
-    }
-
-    private static void resizePreview(JPanel innerPanel, JPanel container) {
-        int w = container.getWidth();
-        int h = container.getHeight();
-        int size =  Math.min(w, h);
-        innerPanel.setPreferredSize(new Dimension(size, size));
-        container.revalidate();
-    }
-}
-
-*/
-
-/*import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-public class MainWindow extends JFrame {
-
-    MainWindow() {
-        super("GridLayout");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Container contenant = getContentPane();
-        contenant.setLayout(new GridLayout(32, 32));
-
-        for (int i = 0; i < 32; i++) {
-            for (int j = 0; j < 32; j++) {
-                contenant.add(new CaseEchiquier(i, j));
-            }
-        }
-
-        pack();
-        setVisible(true);
-    }
-
-    class CaseEchiquier extends JPanel {
-
-        private int lin, col;
-
-        CaseEchiquier(int i, int j) {
-            lin = i;
-            col = j;
-            setPreferredSize(new Dimension(80, 75));
-            setBackground((i + j) % 2 == 0 ? Color.WHITE : Color.GRAY);
-            addMouseListener(new MouseAdapter() {
-                private Color background;
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    background = getBackground();
-                    setBackground(Color.RED);
-                    repaint();
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    setBackground(background);
-                }
-            });
-//            addActionListener(new ActionListener() {
-//                public void actionPerformed(ActionEvent evt) {
-//                    System.out.println((char) ('a' + col) + "" + (8 - lin));
-//
-//                }
-//            });
-        }
-    }
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                //JFrame.setDefaultLookAndFeelDecorated(true);
-                MainWindow window = new MainWindow();
-            }
-        });
-    }
-}
-*/
-/*
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-public class YouAreSoSquare {
-
-    private static JPanel createPanel() {
-        // GBL is important for the next step..
-        JPanel gui = new JPanel(new GridBagLayout());
-        JPanel squareComponent = new JPanel() {
-            private static final long serialVersionUID = 1L;
-            @Override
-            public Dimension getPreferredSize() {
-                // Relies on being the only component
-                // in a layout that will center it without
-                // expanding it to fill all the space.
-                Dimension d = this.getParent().getSize();
-                int newSize = d.width > d.height ? d.height : d.width;
-                newSize = newSize == 0 ? 100 : newSize;
-                return new Dimension(newSize, newSize);
-            }
-        };
-        squareComponent.setBackground(Color.RED);
-        gui.add(squareComponent);
-        return gui;
-    }
-
-    public static void main(String[] args) {
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception useDefault) {
-                }
-                JFrame mainFrame = new JFrame("..So Square");
-                mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                mainFrame.setLocationByPlatform(true);
-                mainFrame.add(createPanel());
-                mainFrame.pack();
-                mainFrame.setMinimumSize(mainFrame.getSize());
-                mainFrame.setVisible(true);
-            }
-        };
-        SwingUtilities.invokeLater(r);
-    }
-}
-
-*/

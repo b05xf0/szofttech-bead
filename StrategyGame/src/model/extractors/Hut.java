@@ -3,32 +3,30 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model.extractors;
-
-import java.awt.Point;
-import model.common.AttrLevel;
-import model.interfaces.IMovable;
 import model.player.Player;
-import java.awt.Point;
 import model.common.Stock;
-import model.extractors.Extractor;
+import model.common.UnitType;
+import model.field.Field;
 
 /**
  *
  * @author sonrisa
  */
 public class Hut extends Extractor {
+    private static final Stock RESOURCES = new Stock(0,10,0);
 
-    private final Stock RESOURCES;
-    
-    public Hut(Point position, Player player) {
-
+    public Hut(Field position, Player player) {
         super(position, player);
-        
-        this.RESOURCES = new Stock(0, 999, 0);
+        type = UnitType.HUT;
     }
 
     @Override
     public Stock getResources() {
-        return this.RESOURCES;
+        return new Stock(RESOURCES);
+    }
+
+    @Override
+    public int getHC() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

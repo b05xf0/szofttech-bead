@@ -4,12 +4,11 @@
  */
 package model.warriors;
 
-import java.awt.Point;
-import model.common.AttrLevel;
 import model.player.Player;
-import java.awt.Point;
 import model.common.Stock;
 import model.common.Unit;
+import model.common.UnitState;
+import model.field.Field;
 import model.interfaces.IMovable;
 
 /**
@@ -18,37 +17,34 @@ import model.interfaces.IMovable;
  */
 public abstract class Warrior extends Unit implements IMovable {
     
-    protected AttrLevel HP;
-    protected AttrLevel ATTACK;
-    protected AttrLevel DEFENCE;
-    protected AttrLevel MOVEMENT;
-
-    protected Warrior(int health, Point position, Player player) {
+    private static final Stock BASECOST = new Stock(50,0,50);
+    protected static final int BASEHEALTH = 50;
+    
+    protected Warrior(int health, Field position, Player player) {
         super(health, position, player);
     }
     
-    public void defend(IMovable m){
-        this.health -= Math.abs(this.DEFENCE.getValue() - m.getAttackValue());
-    }
-    
+    @Override
     public void attack(Unit u){
         u.defend(this);
     }
     
-    public int getAttackValue(){
-        return this.ATTACK.getValue();
+    @Override
+    public final void defend(IMovable m){
+        this.health -= Math.min(m.getAttackValue() - getDefenceValue(), 0) ;
+        if(this.health <= 0) this.state = UnitState.DEAD;
     }
-    
-    public int getMovementCost(){
-        return this.MOVEMENT.getValue();
-    }
-    
-    public int move(Point pos){
+  
+    @Override
+    public int move(Field pos){
         this.position = pos;
-        return this.MOVEMENT.getValue();
+        return getMovementCost();
     }
     
-    public abstract Stock cost();
-        
-    public abstract boolean canFly();
+    @Override
+    public boolean canFly(){ return false; }
+    
+    @Override
+    public final Stock getBaseCost(){ return BASECOST; }
+   
 }

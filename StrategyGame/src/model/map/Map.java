@@ -10,15 +10,14 @@ import resources.ResourceLoader;
 public class Map {
     private static final int MAX_SIZE = 50;
     private static final String MAP_PATH = "resources/map.txt";
-   
+    
     private final Field[][] fields = new Field[MAX_SIZE][MAX_SIZE];
-    private Point[] startPos = new Point[2];
+    private Field[] startPos = new Field[2];
     private int size;
 
     public Map(){
-        InputStream is;
-        is = ResourceLoader.loadResource(MAP_PATH);
-        
+        InputStream is = ResourceLoader.loadResource(MAP_PATH);
+       
         try (Scanner sc = new Scanner(is)){
             String line;
             int j = 0;
@@ -28,8 +27,6 @@ public class Map {
                 for (int i = 0; i < line.length(); i++){
                     Point pos = new Point(i,j);
                     FieldType type;
-                    if (line.charAt(i) == '1') startPos[0] = pos;
-                    if (line.charAt(i) == '2') startPos[1] = pos;
                     type = switch (line.charAt(i)) {
                         case 'g' -> FieldType.GOLD;
                         case 'f' -> FieldType.FOREST;
@@ -39,6 +36,8 @@ public class Map {
                         default -> FieldType.GRASS;
                     };
                     fields[i][j] = new Field(this, pos, type);
+                    if (line.charAt(i) == '1') startPos[0] = fields[i][j];
+                    if (line.charAt(i) == '2') startPos[1] = fields[i][j];
                 }
                 ++j;
             }
@@ -49,12 +48,14 @@ public class Map {
     }
     
     public void init(){
-        //TODO
+        for(int i = 0; i < size; ++i)
+            for(int j = 0; j < size; ++j)
+                fields[i][j].init();
     }
     
     public Field getField(Point pos){ return pos.x < 0 || pos.y < 0 || pos.x >= size || pos.y >= size ? null: fields[pos.x][pos.y]; }
     
     public int getSize() { return size; }
     
-    public Point getStartingPosition(int idx) { return startPos[idx]; }
+    public Field getStartingPosition(int idx) { return startPos[idx]; }
 }

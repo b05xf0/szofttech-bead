@@ -9,6 +9,8 @@ import model.common.AttrLevel;
 import model.player.Player;
 import model.common.Stock;
 import model.common.Unit;
+import model.common.UnitState;
+import model.field.Field;
 import model.interfaces.IMovable;
 
 /**
@@ -17,29 +19,36 @@ import model.interfaces.IMovable;
  */
 public abstract class Extractor extends Unit{
     
-    private AttrLevel HP;
-    private int headCount;
-    protected final AttrLevel DEFENCE;
+    private static final Stock BASECOST = new Stock(100,100,0);
+    private static final int CAPACITY = 5;
+    private static final int BASEHEALTH = 100;
     
+    public static final AttrLevel HP = AttrLevel.MEDIUM;
 
-    protected Extractor(Point position, Player player) {
-        super(AttrLevel.LOW.getValue(), position, player);
-        
-        this.DEFENCE = AttrLevel.LOW;
-        this.HP = AttrLevel.MEDIUM;
+    protected Extractor(Field position, Player player) {
+        super(HP.getValue() * BASEHEALTH, position, player);
+        this.timer = HP.getValue();
     }
     
-    public Stock cost() {
-        return new Stock(4, 3, 0);
+    public Stock extract() {
+        return getResources().multiply(Math.min(getHC(),CAPACITY));
     }
     
-    public Stock extract (int x) {
-        return this.getResources().multiply(x);
+    @Override
+    public final void defend(IMovable m){
+        this.health -= m.getAttackValue();
+        if(this.health <= 0) this.state = UnitState.DEAD;
     }
+
+    @Override
+    public final Stock getBaseCost(){ return BASECOST; }
     
-    public void defend(IMovable m){
-        this.health -= Math.abs(this.DEFENCE.getValue() - m.getAttackValue());
+    @Override
+    public final int getHPValue() {
+        return HP.getValue();
     }
     
     public abstract Stock getResources();
+    public abstract int getHC();
+    
 }

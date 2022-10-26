@@ -7,78 +7,95 @@ package model.workers;
 import model.common.AttrLevel;
 import model.trainers.Barracks;
 import model.trainers.Castle;
-import model.field.FieldType;
 import model.interfaces.IMovable;
 import model.player.Player;
-import java.awt.Point;
 import model.common.Stock;
 import model.common.Unit;
+import model.common.UnitState;
+import model.field.Field;
 
 /**
  *
  * @author sonrisa
  */
 public abstract class Worker extends Unit implements IMovable {
-    private final AttrLevel HP;
-    private final AttrLevel ATTACK;
-    private final AttrLevel DEFENCE;
-    private final AttrLevel MOVEMENT;
+    
+    private static final Stock BASECOST = new Stock(50,0,50);
+    private static final int BASEHEALTH = 50;
+    public final static AttrLevel HP = AttrLevel.LOW;;
+    public final static AttrLevel ATTACK = AttrLevel.LOWEST;
+    public final static AttrLevel DEFENCE = AttrLevel.LOWEST;
+    public final static AttrLevel MOVEMENT = AttrLevel.MEDIUM;
 
-    protected Worker(int health, Point position, Player player) {
-        super(health, position, player);
-        
-        this.HP = AttrLevel.LOW;
-        this.ATTACK = AttrLevel.LOWEST;
-        this.DEFENCE = AttrLevel.LOWEST;
-        this.MOVEMENT = AttrLevel.MEDIUM;
+    protected Worker(Field position, Player player) {
+        super(HP.getValue() * BASEHEALTH, position, player);
+        this.timer = HP.getValue();
     }
     
-    public Stock cost(){
-        return new Stock(1, 0, 2);
-    }
-    
-    public int move(Point pos){
+    @Override
+    public int move(Field pos){
         this.position = pos;
-        return this.MOVEMENT.getValue();
+        return getMovementCost();
     }
     
-    public void defend(IMovable m){
-        this.health -= Math.abs(this.DEFENCE.getValue() - m.getAttackValue());
-    }
+    @Override
+    public final void defend(IMovable m){
+        this.health -= Math.min(m.getAttackValue() - getDefenceValue(), 0) ;
+        if(this.health <= 0) this.state = UnitState.DEAD;
+    }   
     
+    @Override
     public void attack(Unit u){
         u.defend(this);
     }
     
+    @Override
     public int getAttackValue(){
-        return this.ATTACK.getValue();
+        return ATTACK.getValue();
     }
     
+    @Override
+    public int getDefenceValue(){
+        return DEFENCE.getValue();
+    }
+    
+    @Override
     public int getMovementCost(){
-        return this.MOVEMENT.getValue();
+        return MOVEMENT.getValue();
     }
     
+    @Override
     public boolean canFly(){
         return false;
     }
     
-    public boolean canMine(FieldType fieldType){
+    public boolean canMine(){
         return false;
     }
     
-    public boolean canCut(FieldType fieldType){
+    public boolean canCut(){
         return false;
     }
     
-    public boolean canFarm(FieldType fieldType){
+    public boolean canFarm(){
         return false;
     }
     
     public Castle buildCastle(){
-        return new Castle(this.getPosition(), this.getPlayer());
+        setTimer(Castle.HP.getValue());
+        return new Castle(position, player);
     }
     
     public Barracks buildBarracks(){
-        return new Barracks(this.getPosition(), this.getPlayer());
+        setTimer(Barracks.HP.getValue());
+        return new Barracks(position,player);
     }
+    @Override
+    public final Stock getBaseCost(){ return BASECOST; }
+    
+    @Override
+    public final int getHPValue(){ return HP.getValue(); }
+    
+    
 }
+
