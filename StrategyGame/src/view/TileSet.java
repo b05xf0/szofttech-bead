@@ -147,7 +147,7 @@ public class TileSet {
             case 1 -> drawTile(TileType.LEVEL_1,pos,size,g,c);
             case 2 -> drawTile(TileType.LEVEL_2,pos,size,g,c);
             case 3 -> drawTile(TileType.LEVEL_3,pos,size,g,c);
-            default -> drawTile(TileType.LEVEL_4,pos,size,g,c);        
+            case 4 -> drawTile(TileType.LEVEL_4,pos,size,g,c);        
         }
 
     }
@@ -159,7 +159,7 @@ public class TileSet {
             case 1 -> drawTile(TileType.LEVEL_SMALL_1,pos,size,g,c);
             case 2 -> drawTile(TileType.LEVEL_SMALL_2,pos,size,g,c);
             case 3 -> drawTile(TileType.LEVEL_SMALL_3,pos,size,g,c);
-            default -> drawTile(TileType.LEVEL_SMALL_4,pos,size,g,c);        
+            case 4 -> drawTile(TileType.LEVEL_SMALL_4,pos,size,g,c);        
         }
 
     }

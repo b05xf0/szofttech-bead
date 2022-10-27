@@ -46,5 +46,7 @@ public abstract class Warrior extends Unit implements IMovable {
     
     @Override
     public final Stock getBaseCost(){ return BASECOST; }
+    
+    public abstract int getRank();
    
 }

@@ -15,7 +15,7 @@ public class Field {
     private final Point pos;
     private final FieldType type;
     private final Map map;
-    private int variant;
+    private final int variant;
     private Extractor extractor;
     private Trainer trainer;
     private final List<Worker> workers;
@@ -26,12 +26,13 @@ public class Field {
         this.map = map;
         this.pos = pos;
         this.type = type;
+        this.variant = (int)(Math.random() * 100);
         workers = new LinkedList<>();
         warriors = new LinkedList<>();
     }
     
     public void init(){
-        variant = (int)(Math.random() * 100);
+        
         workers.clear();
         warriors.clear();
         extractor = null;
@@ -45,6 +46,12 @@ public class Field {
     public List<Warrior> getWarriors() { return warriors; }
     public Extractor getExtractor() { return extractor; }
     public Trainer getTrainer() { return trainer; }
+    public int getHighestRank() {
+        int rank = 0;
+        for(Warrior w: warriors)
+            if(w.getRank() > rank) rank = w.getRank();
+        return rank;
+    }
     
     public void addUnit(Extractor u) { extractor = u; }
     public void addUnit(Trainer u) { trainer = u; }
@@ -56,10 +63,15 @@ public class Field {
     public void removeUnit(Warrior u) { warriors.remove(u); }
     public void removeUnit(Worker u) { workers.remove(u); }
     
-    public Field getFieldToNorth() { return map.getField(new Point(pos.x, pos.y - 1)); }
-    public Field getFieldToSouth() { return map.getField(new Point(pos.x, pos.y + 1)); }
-    public Field getFieldToEast() { return map.getField(new Point(pos.x + 1, pos.y)); }
-    public Field getFieldToWest() { return map.getField(new Point(pos.x - 1, pos.y)); }
+    public Field getFieldToNorth(int d) { return map.getField(new Point(pos.x, pos.y - d)); }
+    public Field getFieldToSouth(int d) { return map.getField(new Point(pos.x, pos.y + d)); }
+    public Field getFieldToEast(int d) { return map.getField(new Point(pos.x + d, pos.y)); }
+    public Field getFieldToWest(int d) { return map.getField(new Point(pos.x - d, pos.y)); }
+
+    public Field getFieldToNorth() { return getFieldToNorth(1); }
+    public Field getFieldToSouth() { return getFieldToSouth(1); }
+    public Field getFieldToEast() { return getFieldToEast(1); }
+    public Field getFieldToWest() { return getFieldToWest(1); }
     
     public boolean isOnBorder() { return getFieldToNorth() == null || getFieldToSouth() == null || getFieldToEast() == null || getFieldToWest() == null; }
     
@@ -92,7 +104,11 @@ public class Field {
         if (isOrientedToWest()) return Orientation.W;
         return Orientation._NA_;
     }
-
+    public String getBuildingInfo(){
+        if(trainer != null) return trainer.toString();
+        if(extractor != null) return extractor.toString();
+        return "Empty";
+    }    
     @Override
     public String toString(){
         return "(" + this.pos.x + ", " + this.pos.y + "): " + this.type + " (" + this.getOrientation() + ")";

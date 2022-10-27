@@ -22,7 +22,6 @@ import model.warriors.Swordsman;
 
 public class Barracks extends Trainer{
     public static final AttrLevel HP = AttrLevel.MEDIUM;
-    private static final int BASEHEALTH = 100;
     
     public Barracks(Field position, Player player) {
         super(HP.getValue() * BASEHEALTH, position, player);

@@ -13,6 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import javax.swing.AbstractAction;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import model.GameManager;
 import model.GameState;
+import model.workers.Worker;
 
 public class MainWindow extends JFrame {
 
@@ -32,11 +34,11 @@ public class MainWindow extends JFrame {
     
     private final MapPanel map;
     
-    private final CardPanel gameInfo;
     private final CardPanel playerInfo;
     private final CardPanel fieldInfo;
     private final JButton endTurnButton;
     private final JPanel ctrl;
+    private final JPanel units;
     
     public MainWindow() throws IOException {
         game = new GameManager();
@@ -57,17 +59,18 @@ public class MainWindow extends JFrame {
 
         getContentPane().setLayout(new BorderLayout());
         map = createMapPanel();
-        gameInfo = new CardPanel();
         playerInfo = new CardPanel();
         fieldInfo = new CardPanel();
         endTurnButton = new JButton("End Turn");
         ctrl = createControlPanel();
-        getContentPane().add(ctrl, BorderLayout.LINE_START);
+        ctrl.setMaximumSize(new Dimension(500,map.getHeight()));
+        units = createUnitsPanel();
+        getContentPane().add(ctrl, BorderLayout.CENTER);
         getContentPane().add(map, BorderLayout.LINE_END);
         setExtendedState( JFrame.MAXIMIZED_BOTH );
         //setResizable(false);
         setMinimumSize(new Dimension(800,600));
-        pack();
+        //pack();
         setLocationRelativeTo(null);
         setVisible(true);
 
@@ -121,6 +124,7 @@ public class MainWindow extends JFrame {
         game.start();
         ctrl.setVisible(true);
         map.repaint();
+        updatePlayerInfo();
     }
     
     private JMenuBar createMenuBar(){
@@ -154,7 +158,9 @@ public class MainWindow extends JFrame {
                         case SELECTFIELD -> {
                             game.selectField(map.getPosition(e.getX(),e.getY()));
                             map.repaint();
-                            //ctrl.refresh();
+                            updateFieldInfo();
+                            
+                            
                         }
                         default -> {}
                     }
@@ -168,18 +174,77 @@ public class MainWindow extends JFrame {
         JPanel ctrlPanel = new JPanel();
         ctrlPanel.setVisible(false);
         ctrlPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-        gameInfo.add(endTurnButton,BorderLayout.LINE_END);
-        ctrlPanel.add(gameInfo);
+        //ctrlPanel.setLayout(new BoxLayout(ctrlPanel, BoxLayout.PAGE_AXIS));
+     
+        playerInfo.add(endTurnButton,BorderLayout.LINE_END);
+        
         ctrlPanel.add(playerInfo);
+        fieldInfo.setVisible(false);
         ctrlPanel.add(fieldInfo);
         endTurnButton.addActionListener((ActionEvent e) -> {
             game.endTurn();
             map.repaint();
+            updatePlayerInfo();
+            updateFieldInfo();
             
         });
         return ctrlPanel;
     }
+    private JPanel createUnitsPanel() {
+        JPanel unitsPanel = new JPanel();
+        unitsPanel.setOpaque(false);
+        unitsPanel.setVisible(false);
+        unitsPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+        fieldInfo.add(unitsPanel,BorderLayout.CENTER);
+        unitsPanel.setVisible(true);
+        fieldInfo.setVisible(false);
+        
+        return unitsPanel;
+    }
+
+    private void updatePlayerInfo() {
+        ctrl.setVisible(false);
+        playerInfo.update(
+                game.getCurrentPlayer().toString(),
+                game.toString(),
+                game.getCurrentPlayer().getTreasury().toString());
+        ctrl.setVisible(true);
+    }
+    private void updateFieldInfo() {
+        ctrl.setVisible(false);
+        fieldInfo.setVisible(false);
+        units.removeAll();
+        if(game.getSelectedField() != null){
+        fieldInfo.update(
+                game.getSelectedField().toString(),
+                "",
+                "");
+        if(game.getSelectedField().getTrainer() != null){
+            units.add(new CardPanel(
+                    String.format("Health: %d", game.getSelectedField().getTrainer().getHealth()),
+                    game.getSelectedField().getTrainer().getClass().getSimpleName(),
+                    ""
+            ));
+        }
+        if(!game.getSelectedField().getWorkers().isEmpty()){
+            for(Worker w : game.getSelectedField().getWorkers()){
+                units.add(new CardPanel(
+                        String.format("Health: %d", w.getHealth()),
+                        w.getClass().getSimpleName(),
+                        ""
+                ));            
+            
+            }
+            
+
+        }
+
+        fieldInfo.setVisible(true);
+        }
+        ctrl.setVisible(true);
+    }    
     
+        
     public static void main(String[] args) throws IOException {
         MainWindow window = new MainWindow();
     }

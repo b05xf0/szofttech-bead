@@ -50,4 +50,7 @@ public class Swordsman extends Warrior implements IMovable {
     public int getMovementCost() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    @Override
+    public int getRank(){return 2;}
 }

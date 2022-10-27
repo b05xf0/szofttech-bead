@@ -21,7 +21,7 @@ public abstract class Extractor extends Unit{
     
     private static final Stock BASECOST = new Stock(100,100,0);
     private static final int CAPACITY = 5;
-    private static final int BASEHEALTH = 100;
+    private static final int BASEHEALTH = 200;
     
     public static final AttrLevel HP = AttrLevel.MEDIUM;
 

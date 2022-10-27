@@ -47,7 +47,7 @@ public class MapPanel extends JPanel {
             for (int j = 0; j < mapSize; ++j) {
                 Field field = game.getMap().getField(new Point(i,j));
                 Point pos = new Point(i * tileSize + offsetX,j * tileSize + offsetY); 
-                Unit unit;
+                Unit building;
                 switch (field.getType()) {
                     case GRASS -> TileSet.drawGrass(field.getVariant(),tileSize,  pos, g, this);
                     case GOLD -> TileSet.drawGold(field.getVariant(),tileSize,  pos, g, this);
@@ -56,11 +56,23 @@ public class MapPanel extends JPanel {
                     case RIVER -> TileSet.drawRiver(field.getVariant(),field.getOrientation(),tileSize,  pos, g, this);
                     case BRIDGE -> TileSet.drawBridge(field.getVariant(),field.getOrientation(),tileSize,  pos, g, this);
                 }
-                if ((unit = field.getTrainer()) != null) switch(unit.getType()){
-                    case CASTLE -> TileSet.drawCastle(unit.getPlayer().getIndex(),tileSize, pos, g, this);
-                    case BARRACKS -> TileSet.drawBarracks(unit.getPlayer().getIndex(),tileSize, pos, g, this);
+                if ((building = field.getTrainer()) != null || (building = field.getExtractor()) != null ) switch(building.getType()){
+                    case CASTLE -> TileSet.drawCastle(building.getPlayer().getIndex(),tileSize, pos, g, this);
+                    case BARRACKS -> TileSet.drawBarracks(building.getPlayer().getIndex(),tileSize, pos, g, this);
+                    default -> TileSet.drawCamp(building.getPlayer().getIndex(),tileSize, pos, g, this);
                 }
-
+                if (!field.getWorkers().isEmpty()) {
+                    if(building == null)
+                        TileSet.drawUnit(field.getWorkers().get(0).getPlayer().getIndex(),0,tileSize, pos, g, this);
+                    else
+                        TileSet.drawSmallUnit(field.getWorkers().get(0).getPlayer().getIndex(),0,tileSize, pos, g, this);
+                }
+                if (!field.getWarriors().isEmpty()) {
+                    if(building == null)
+                        TileSet.drawUnit(field.getWarriors().get(0).getPlayer().getIndex(),field.getHighestRank(),tileSize, pos, g, this);
+                    else    
+                        TileSet.drawSmallUnit(field.getWarriors().get(0).getPlayer().getIndex(),field.getHighestRank(),tileSize, pos, g, this);
+                }                    
 
                 if (field.equals(game.getSelectedField())) TileSet.drawSelection(tileSize,  pos, g, this);
             

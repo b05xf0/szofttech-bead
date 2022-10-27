@@ -43,6 +43,7 @@ public class GameManager {
     public void start(){
         selectedField = null;
         playerIdx = 0;
+        turn = 1;
         actionPoints = ACTION_POINTS;
         map.init();
         players[0].init();
@@ -51,8 +52,15 @@ public class GameManager {
         //TODO
     }
     public void endTurn(){
+        ++turn;
         switchPlayer();
+        selectedField = null;
         actionPoints = ACTION_POINTS;
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("Turn #%d - APs: %d - %s", turn, actionPoints, state);
     }
     
 }

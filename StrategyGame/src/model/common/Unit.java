@@ -66,4 +66,9 @@ public abstract class Unit {
     
     protected abstract Stock getBaseCost();
     public abstract int getHPValue();
+    
+    @Override
+    public String toString(){
+        return this.getClass().getSimpleName();
+    }
 }

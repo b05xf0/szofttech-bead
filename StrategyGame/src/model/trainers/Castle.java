@@ -20,7 +20,7 @@ import model.workers.Woodcutter;
  */
 public class Castle extends Trainer {
     public static final AttrLevel HP = AttrLevel.HIGH;
-    private static final int BASEHEALTH = 100;
+    
     
     public Castle(Field position, Player player) {
         super(HP.getValue() * BASEHEALTH, position, player);

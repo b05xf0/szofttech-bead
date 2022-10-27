@@ -19,6 +19,7 @@ import model.player.Player;
 public abstract class Trainer extends Unit{
     
     private static final Stock BASECOST = new Stock(100,100,0);
+    protected static final int BASEHEALTH = 200;
         
     protected Trainer(int health, Field position, Player player) {
         super(health, position, player);

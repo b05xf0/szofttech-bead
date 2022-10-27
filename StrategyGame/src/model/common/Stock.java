@@ -10,9 +10,9 @@ package model.common;
  */
 public class Stock {
     
-    public static final int DEFAULT_GOLD = 100;
-    public static final int DEFAULT_LUMBER = 100;
-    public static final int DEFAULT_FOOD = 100;
+    public static final int DEFAULT_GOLD = 1000;
+    public static final int DEFAULT_LUMBER = 1000;
+    public static final int DEFAULT_FOOD = 1000;
     
     
     private int gold;

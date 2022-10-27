@@ -20,7 +20,7 @@ public class CardPanel extends JPanel{
     JLabel header, body, footer;
     public CardPanel(){
         setOpaque(true);
-        setBackground(new Color(0,0,0,32));
+        setBackground(new Color(0,0,0,16));
         setLayout(new BorderLayout());
         this.header = new JLabel();
         this.body = new JLabel();
@@ -35,15 +35,21 @@ public class CardPanel extends JPanel{
         add(this.body,BorderLayout.CENTER);
         add(this.footer,BorderLayout.PAGE_END);
     }
-    public void update(String header,String body, String footer){
+    public CardPanel(String header,String body, String footer){
+        this();
+        update(header,body,footer);
+    }
+    public final void update(String header,String body, String footer){
+
         this.header.setText(header);
         this.body.setText(body);
         this.footer.setText(footer);
+        //.validate();
     }
     /*
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(getParent().getWidth()/2-10, getParent().getHeight()/6);
+        return new Dimension(getParent().getHeight()/2, getParent().getHeight()/4);
     } 
     */
 
