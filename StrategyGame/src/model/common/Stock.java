@@ -9,6 +9,12 @@ package model.common;
  * @author sonrisa
  */
 public class Stock {
+    
+    public static final int DEFAULT_GOLD = 1000;
+    public static final int DEFAULT_LUMBER = 1000;
+    public static final int DEFAULT_FOOD = 1000;
+    
+    
     private int gold;
     private int lumber;
     private int food;
@@ -17,6 +23,13 @@ public class Stock {
         this.gold = gold;
         this.lumber = lumber;
         this.food = food;
+    }
+    public Stock(Stock s) {
+        this(s.gold,s.lumber,s.food);
+    }
+    
+    public Stock() {
+        this(DEFAULT_GOLD,DEFAULT_LUMBER,DEFAULT_FOOD);
     }
     
     public int getGold(){
@@ -54,4 +67,16 @@ public class Stock {
         
         return this;
     }
+    
+    public void init(){
+        this.gold = DEFAULT_GOLD;
+        this.lumber = DEFAULT_LUMBER;
+        this.food = DEFAULT_FOOD;    
+    }
+    
+    @Override
+    public String toString(){
+        return String.format("Gold: %d Lumber: %d Food: %d", gold, lumber, food); 
+    }
+    
 }

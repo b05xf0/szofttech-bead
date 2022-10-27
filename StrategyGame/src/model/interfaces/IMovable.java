@@ -4,17 +4,18 @@
  */
 package model.interfaces;
 
-import java.awt.Point;
 import model.common.Unit;
+import model.field.Field;
 
 /**
  *
  * @author sonrisa
  */
 public interface IMovable {
-    public int move(Point position);
+    public int move(Field position);
     public void attack(Unit unit);
     public int getAttackValue();
+    public int getDefenceValue();
     public int getMovementCost();
     public boolean canFly();
 }

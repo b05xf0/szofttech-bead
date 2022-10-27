@@ -4,12 +4,12 @@
  */
 package model.workers;
 
-import model.common.AttrLevel;
+import model.common.UnitType;
 import model.extractors.Farm;
 import model.field.FieldType;
 import model.player.Player;
-import java.awt.Point;
-import model.workers.Worker;
+import model.field.Field;
+
 
 /**
  *
@@ -17,15 +17,18 @@ import model.workers.Worker;
  */
 public class Farmer extends Worker {
 
-    public Farmer(Point position, Player player) {
-        super(AttrLevel.LOW.getValue(), position, player);
+    public Farmer(Field position, Player player) {
+        super(position, player);
+        type = UnitType.FARMER;
     }
     
-    public boolean canFarm(FieldType fieldType){
-        return fieldType == FieldType.GRASS;
+    @Override
+    public boolean canFarm(){
+        return position.getType() == FieldType.GRASS;
     }
     
     public Farm buildFarm(){
-        return new Farm(this.getPosition(), this.getPlayer());
+        setTimer(Farm.HP.getValue());
+        return new Farm(position, player);
     }
 }

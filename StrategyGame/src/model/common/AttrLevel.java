@@ -10,10 +10,10 @@ package model.common;
  */
 public enum AttrLevel {
     LOWEST(1),
-    LOW(10),
-    MEDIUM(25),
-    HIGH(50),
-    HIGHEST(100);
+    LOW(2),
+    MEDIUM(3),
+    HIGH(4),
+    HIGHEST(5);
     
     private int value;
     

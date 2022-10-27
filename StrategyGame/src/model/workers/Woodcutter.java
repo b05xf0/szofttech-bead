@@ -4,13 +4,12 @@
  */
 package model.workers;
 
-import model.common.AttrLevel;
+import model.common.UnitType;
 import model.field.FieldType;
 import model.extractors.Hut;
+import model.field.Field;
 import model.player.Player;
-import java.awt.Point;
-import model.workers.Miner;
-import model.workers.Worker;
+
 
 /**
  *
@@ -18,15 +17,18 @@ import model.workers.Worker;
  */
 public class Woodcutter extends Worker {
 
-    public Woodcutter(Point position, Player player) {
-        super(AttrLevel.LOW.getValue(), position, player);
+    public Woodcutter(Field position, Player player) {
+        super(position, player);
+        type = UnitType.WOODCUTTER;
     }
     
-    public boolean canCut(FieldType fieldType){
-        return fieldType == FieldType.FOREST;
+    @Override
+    public boolean canCut(){
+        return position.getType() == FieldType.FOREST;
     }
     
     public Hut buildHut(){
-        return new Hut(this.getPosition(), this.getPlayer());
+        setTimer(Hut.HP.getValue());
+        return new Hut(position, player);
     }
 }
