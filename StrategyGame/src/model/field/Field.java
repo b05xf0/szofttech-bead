@@ -10,7 +10,7 @@ import model.trainers.Trainer;
 import model.warriors.Warrior;
 import model.workers.Worker;
 
-public class Field {
+    public class Field {
 
     private final Point pos;
     private final FieldType type;

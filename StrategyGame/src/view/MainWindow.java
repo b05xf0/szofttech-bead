@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import model.GameManager;
 import model.GameState;
+import model.trainers.Trainer;
 import model.workers.Worker;
 
 public class MainWindow extends JFrame {
@@ -39,6 +40,7 @@ public class MainWindow extends JFrame {
     private final JButton endTurnButton;
     private final JPanel ctrl;
     private final JPanel units;
+    private JPanel actions;
     
     public MainWindow() throws IOException {
         game = new GameManager();
@@ -65,6 +67,7 @@ public class MainWindow extends JFrame {
         ctrl = createControlPanel();
         ctrl.setMaximumSize(new Dimension(500,map.getHeight()));
         units = createUnitsPanel();
+        actions = createActionsPanel();
         getContentPane().add(ctrl, BorderLayout.CENTER);
         getContentPane().add(map, BorderLayout.LINE_END);
         setExtendedState( JFrame.MAXIMIZED_BOTH );
@@ -73,7 +76,7 @@ public class MainWindow extends JFrame {
         //pack();
         setLocationRelativeTo(null);
         setVisible(true);
-
+        
     }
 
     private void showExitConfirmation() {
@@ -159,12 +162,9 @@ public class MainWindow extends JFrame {
                             game.selectField(map.getPosition(e.getX(),e.getY()));
                             map.repaint();
                             updateFieldInfo();
-                            
-                            
                         }
                         default -> {}
                     }
-
                 }
             });
         return mapPanel;
@@ -201,6 +201,19 @@ public class MainWindow extends JFrame {
         
         return unitsPanel;
     }
+    
+    private JPanel createActionsPanel(){
+        JPanel actionsPanel = new JPanel();
+        
+        actionsPanel.setOpaque(false);
+        actionsPanel.setVisible(false);
+        actionsPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+        fieldInfo.add(actionsPanel,BorderLayout.PAGE_END);
+        actionsPanel.setVisible(true);
+        fieldInfo.setVisible(false);
+        
+        return actionsPanel;
+    }
 
     private void updatePlayerInfo() {
         ctrl.setVisible(false);
@@ -210,41 +223,73 @@ public class MainWindow extends JFrame {
                 game.getCurrentPlayer().getTreasury().toString());
         ctrl.setVisible(true);
     }
+    
     private void updateFieldInfo() {
         ctrl.setVisible(false);
         fieldInfo.setVisible(false);
         units.removeAll();
+        actions.removeAll();
         if(game.getSelectedField() != null){
-        fieldInfo.update(
-                game.getSelectedField().toString(),
-                "",
-                "");
-        if(game.getSelectedField().getTrainer() != null){
-            units.add(new CardPanel(
-                    String.format("Health: %d", game.getSelectedField().getTrainer().getHealth()),
-                    game.getSelectedField().getTrainer().getClass().getSimpleName(),
-                    ""
-            ));
-        }
-        if(!game.getSelectedField().getWorkers().isEmpty()){
-            for(Worker w : game.getSelectedField().getWorkers()){
-                units.add(new CardPanel(
-                        String.format("Health: %d", w.getHealth()),
-                        w.getClass().getSimpleName(),
+            fieldInfo.update(
+                    game.getSelectedField().toString(),
+                    "",
+                    "");
+            if(game.getSelectedField().getTrainer() != null){
+                CardPanel cardPanel = new CardPanel(
+                        String.format("Health: %d", game.getSelectedField().getTrainer().getHealth()),
+                        game.getSelectedField().getTrainer().getClass().getSimpleName(),
                         ""
-                ));            
-            
+                );
+                cardPanel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        System.out.println("trainer clicked");
+                        addTrainerActions(game.getSelectedField().getTrainer());
+                    }
+                });
+                units.add(cardPanel);
             }
-            
-
-        }
-
-        fieldInfo.setVisible(true);
+            if(!game.getSelectedField().getWorkers().isEmpty()){
+                for(Worker w : game.getSelectedField().getWorkers()){
+                    CardPanel cardPanel = new CardPanel(
+                            String.format("Health: %d", w.getHealth()),
+                            w.getClass().getSimpleName(),
+                            ""
+                    );
+                    cardPanel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        System.out.println("worker clicked");
+                        addWorkerActions(w);
+                    }
+                    });
+                    units.add(cardPanel);
+                }
+            }
+            fieldInfo.setVisible(true);
         }
         ctrl.setVisible(true);
-    }    
+    }
     
-        
+    private void addTrainerActions(Trainer t){
+        fieldInfo.setVisible(false);
+        actions.removeAll();
+        actions.add(new CardPanel("", "Train Peasant", ""));
+        actions.add(new CardPanel("", "Train Swordsman", ""));
+        actions.add(new CardPanel("", "Train Knight", ""));
+        actions.add(new CardPanel("", "Train Dragon", ""));
+        fieldInfo.setVisible(true);
+    }
+    
+    private void addWorkerActions(Worker w){
+        fieldInfo.setVisible(false);
+        actions.removeAll();
+        actions.add(new CardPanel("", "Attack", ""));
+        actions.add(new CardPanel("", "Move", ""));
+        actions.add(new CardPanel("", "Build", ""));
+        fieldInfo.setVisible(true);
+    }
+    
     public static void main(String[] args) throws IOException {
         MainWindow window = new MainWindow();
     }
