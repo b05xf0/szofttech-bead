@@ -10,5 +10,4 @@ package model.interfaces;
  */
 public interface ICommand<T> {
     public T execute();
-    public boolean canExecute();
 }

@@ -16,36 +16,20 @@ import model.interfaces.ICommand;
 public class ActionCommand<T> implements ICommand {
     
     Callable _execute;
-    Callable<Boolean> _canExecute;
     
-    public ActionCommand(Callable execute, Callable<Boolean> canExecute){
+    public ActionCommand(Callable execute){
         this._execute = execute;
-        this._canExecute = canExecute;
     }
     
     @Override
     public T execute() {
         try {
-            if(this._canExecute.call()){
-                return (T) this._execute.call();
-            }
+            return (T) this._execute.call();
         } catch (Exception ex) {
-            Logger.getLogger(ActionCommand.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
         }
         finally{
             return null;
-        }
-    }
-
-    @Override
-    public boolean canExecute() {
-        try {
-            return this._canExecute.call();
-        } catch (Exception ex) {
-            Logger.getLogger(ActionCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally{
-            return false;
         }
     }
 }
