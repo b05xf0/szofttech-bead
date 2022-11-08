@@ -31,4 +31,9 @@ public class Woodcutter extends Worker {
         setTimer(Hut.HP.getValue());
         return new Hut(position, player);
     }
+
+    @Override
+    public void populateActions() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

@@ -5,6 +5,7 @@
 package model.trainers;
 
 
+import model.common.ActionCommand;
 import model.common.AttrLevel;
 import model.common.UnitState;
 import model.common.UnitType;
@@ -21,6 +22,7 @@ import model.workers.Woodcutter;
 public class Castle extends Trainer {
     public static final AttrLevel HP = AttrLevel.HIGH;
     
+    private ActionCommand trainMinerCommand;
     
     public Castle(Field position, Player player) {
         super(HP.getValue() * BASEHEALTH, position, player);
@@ -38,7 +40,7 @@ public class Castle extends Trainer {
         return false;
     }
     
-    @Override
+    
     public boolean canTrainWorker() {
         return true;
     }
@@ -53,5 +55,10 @@ public class Castle extends Trainer {
     
     public Farmer trainFarmer() {
         return new Farmer(position, player);
+    }
+
+    @Override
+    public void populateActions() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
