@@ -5,7 +5,9 @@
 package model.common;
 
 import java.awt.Point;
+import java.util.List;
 import model.field.Field;
+import model.interfaces.ICommand;
 import model.player.Player;
 import model.interfaces.IMovable;
 
@@ -20,12 +22,21 @@ public abstract class Unit {
     protected Field position;
     protected int health;
     protected UnitType type;
+    protected List<ICommand> actions; 
     
     protected Unit(int health, Field position, Player player){
         this.health = health;
         this.position = position;
         this.player = player;
         this.state = UnitState.BUSY;
+    }
+    
+    public List<ICommand> getActions() throws NullPointerException {
+        if(this.actions == null){
+            throw new NullPointerException("Actions cannot be null. Probably the populate method was not called in the constructor.");
+        }
+        
+        return this.actions;
     }
     
     public int getHealth(){
@@ -57,6 +68,7 @@ public abstract class Unit {
         if(this.timer > 0) setTimer(this.timer-1);
     }
     
+    public abstract void populateActions();
     
     public abstract void defend(IMovable m);
     
