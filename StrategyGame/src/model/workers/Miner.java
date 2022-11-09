@@ -30,4 +30,9 @@ public class Miner extends Worker {
         setTimer(Mine.HP.getValue());
         return new Mine(position, player);
     }
+
+    @Override
+    public void populateActions() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

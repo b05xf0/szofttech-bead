@@ -31,4 +31,9 @@ public class Farmer extends Worker {
         setTimer(Farm.HP.getValue());
         return new Farm(position, player);
     }
+
+    @Override
+    public void populateActions() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

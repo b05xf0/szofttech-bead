@@ -48,4 +48,9 @@ public class Knight extends Warrior implements IMovable {
     }
     @Override
     public int getRank(){return 3;}
+
+    @Override
+    public void populateActions() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

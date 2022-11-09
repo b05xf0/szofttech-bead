@@ -34,23 +34,23 @@ public class Barracks extends Trainer{
         return HP.getValue();
     }
     
-    @Override
+    
     public boolean canTrainPeasant() {
         return true;
     }
     
-    @Override
+    
     public boolean canTrainSwordsman() {
         return true;
     }
     
-    @Override
+    
     public boolean canTrainKnight() {
         return true;
 
     }
     
-    @Override
+   
     public boolean canTrainDragon() {
         return true;
     }
@@ -73,5 +73,10 @@ public class Barracks extends Trainer{
     public Dragon trainDragon() {
         setTimer(Dragon.HP.getValue());
         return new Dragon(position, player);
+    }
+
+    @Override
+    public void populateActions() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
