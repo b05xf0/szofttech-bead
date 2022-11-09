@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -24,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 import model.GameManager;
 import model.GameState;
 import model.trainers.Trainer;
@@ -38,7 +41,7 @@ public class MainWindow extends JFrame {
     private final CardPanel playerInfo;
     private final CardPanel fieldInfo;
     private final JButton endTurnButton;
-    private final JPanel ctrl;
+    private final ControlPanel ctrl;
     private final JPanel units;
     private JPanel actions;
     
@@ -65,7 +68,7 @@ public class MainWindow extends JFrame {
         fieldInfo = new CardPanel();
         endTurnButton = new JButton("End Turn");
         ctrl = createControlPanel();
-        ctrl.setMaximumSize(new Dimension(500,map.getHeight()));
+        //ctrl.setMaximumSize(new Dimension(500,map.getHeight()));
         units = createUnitsPanel();
         actions = createActionsPanel();
         getContentPane().add(ctrl, BorderLayout.CENTER);
@@ -170,17 +173,12 @@ public class MainWindow extends JFrame {
         return mapPanel;
     }
     
-    private JPanel createControlPanel() {
-        JPanel ctrlPanel = new JPanel();
-        ctrlPanel.setVisible(false);
-        ctrlPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-        //ctrlPanel.setLayout(new BoxLayout(ctrlPanel, BoxLayout.PAGE_AXIS));
-     
+    private ControlPanel createControlPanel() {
+        ControlPanel ctrlPanel = new ControlPanel();
         playerInfo.add(endTurnButton,BorderLayout.LINE_END);
-        
-        ctrlPanel.add(playerInfo);
+        ctrlPanel.addPanel(playerInfo);
         fieldInfo.setVisible(false);
-        ctrlPanel.add(fieldInfo);
+        ctrlPanel.addPanel(fieldInfo);
         endTurnButton.addActionListener((ActionEvent e) -> {
             game.endTurn();
             map.repaint();
@@ -194,7 +192,8 @@ public class MainWindow extends JFrame {
         JPanel unitsPanel = new JPanel();
         unitsPanel.setOpaque(false);
         unitsPanel.setVisible(false);
-        unitsPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+        unitsPanel.setBorder(new EmptyBorder(5,5,5,5));
+        unitsPanel.setLayout(new GridLayout(0,4,5,5));
         fieldInfo.add(unitsPanel,BorderLayout.CENTER);
         unitsPanel.setVisible(true);
         fieldInfo.setVisible(false);
