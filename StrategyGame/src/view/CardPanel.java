@@ -39,6 +39,7 @@ public class CardPanel extends JPanel{
         this();
         update(header,body,footer);
     }
+    
     public final void update(String header,String body, String footer){
 
         this.header.setText(header);
