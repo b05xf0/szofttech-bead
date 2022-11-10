@@ -5,6 +5,7 @@
 package model.common;
 
 import java.awt.Point;
+import java.util.LinkedList;
 import java.util.List;
 import model.field.Field;
 import model.interfaces.ICommand;
@@ -29,6 +30,7 @@ public abstract class Unit {
         this.position = position;
         this.player = player;
         this.state = UnitState.BUSY;
+        this.actions = new LinkedList<>();
     }
     
     public List<ICommand> getActions() throws NullPointerException {

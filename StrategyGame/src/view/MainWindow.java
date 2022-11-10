@@ -32,6 +32,7 @@ import javax.swing.border.EmptyBorder;
 import model.GameManager;
 import model.GameState;
 import model.common.Unit;
+import model.interfaces.ICommand;
 import model.trainers.Trainer;
 import model.workers.Worker;
 
@@ -101,9 +102,10 @@ public class MainWindow extends JFrame {
         setExtendedState( JFrame.MAXIMIZED_BOTH );
         //setResizable(false);
         setMinimumSize(new Dimension(800,600));
-        //pack();
+        pack();
         setLocationRelativeTo(null);
         setVisible(true);
+        startGame();
         
     }
 
@@ -315,10 +317,23 @@ public class MainWindow extends JFrame {
         ctrl.setVisible(false);
         //actionCtrl.setVisible(false);
         actions.removeAll();
+        /*
         actions.add(new CardPanel("", "Train Peasant", ""));
         actions.add(new CardPanel("", "Train Swordsman", ""));
         actions.add(new CardPanel("", "Train Knight", ""));
         actions.add(new CardPanel("", "Train Dragon", ""));
+        */
+        for(ICommand c : t.getActions()){
+            CardPanel command = new CardPanel("", c.toString(), "");
+            actions.add(command);
+            command.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        System.out.println(c.getClass().getSimpleName());
+                        c.execute();
+                    }
+                    });
+        }
         //actions.setVisible(true);
         actionCtrl.setVisible(true);
         ctrl.setVisible(true);

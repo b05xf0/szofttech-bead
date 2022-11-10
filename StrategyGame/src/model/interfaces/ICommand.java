@@ -8,6 +8,6 @@ package model.interfaces;
  *
  * @author sonrisa
  */
-public interface ICommand<T> {
-    public T execute();
+public interface ICommand/*<T>*/ {
+    public /*T*/void execute();
 }

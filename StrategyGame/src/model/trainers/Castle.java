@@ -5,12 +5,16 @@
 package model.trainers;
 
 
+import commands.TrainMinerCommand;
+import java.util.LinkedList;
+import java.util.List;
 import model.common.ActionCommand;
 import model.common.AttrLevel;
 import model.common.UnitState;
 import model.common.UnitType;
 import model.player.Player;
 import model.field.Field;
+import model.interfaces.ICommand;
 import model.workers.Farmer;
 import model.workers.Miner;
 import model.workers.Woodcutter;
@@ -22,12 +26,13 @@ import model.workers.Woodcutter;
 public class Castle extends Trainer {
     public static final AttrLevel HP = AttrLevel.HIGH;
     
-    private ActionCommand trainMinerCommand;
+    //private ActionCommand trainMinerCommand;
     
     public Castle(Field position, Player player) {
         super(HP.getValue() * BASEHEALTH, position, player);
         this.timer = HP.getValue();
         type = UnitType.CASTLE;
+        populateActions();
     }
     
     @Override
@@ -40,25 +45,43 @@ public class Castle extends Trainer {
         return false;
     }
     
+    @Override
+     public List<ICommand> getActions() throws NullPointerException {
+        return this.actions;
+    }
     
     public boolean canTrainWorker() {
         return true;
     }
     
     public Miner trainMiner() {
-        return new Miner(position, player);
+        Miner unit = new Miner(position, player);
+        position.addUnit(unit);
+        player.addUnit(unit);
+        player.getTreasury().decrement(unit.cost());
+        return unit;
     }
     
     public Woodcutter trainWoodcutter() {
-        return new Woodcutter(position, player);
+        Woodcutter unit = new Woodcutter(position, player);
+        position.addUnit(unit);
+        player.addUnit(unit);
+        player.getTreasury().decrement(unit.cost());
+        return unit;
     }
     
     public Farmer trainFarmer() {
-        return new Farmer(position, player);
+        Farmer unit = new Farmer(position, player);
+        position.addUnit(unit);
+        player.addUnit(unit);
+        player.getTreasury().decrement(unit.cost());
+        return unit;
     }
 
     @Override
-    public void populateActions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public final void populateActions() {
+        actions.add(new TrainMinerCommand(this));
+        //actions.add(new TrainMinerCommand(this));
+        //actions.add(new TrainMinerCommand(this));
     }
 }

@@ -13,23 +13,24 @@ import model.interfaces.ICommand;
  *
  * @author sonrisa
  */
-public class ActionCommand<T> implements ICommand {
+public class ActionCommand/*<T>*/ implements ICommand {
     
-    Callable _execute;
-    
-    public ActionCommand(Callable execute){
+    //Callable _execute;
+    Runnable _execute;
+    public ActionCommand(/*Callable*/Runnable execute){
         this._execute = execute;
     }
     
     @Override
-    public T execute() {
+    public /*T*/void execute() {
         try {
-            return (T) this._execute.call();
+            this._execute.run();
+            //return (T) this._execute.call();
         } catch (Exception ex) {
             System.out.println(ex);
         }
         finally{
-            return null;
+            //return null;
         }
     }
 }
