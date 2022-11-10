@@ -6,7 +6,6 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,7 +28,7 @@ public class CardPanel extends JPanel{
         this.body.setBorder(new EmptyBorder(10,10,10,10));
         this.footer.setBorder(new EmptyBorder(10,10,10,10));
         this.header.setFont(new Font("Consolas", Font.PLAIN, 12));
-        this.body.setFont(new Font("Consolas", Font.PLAIN, 24));
+        this.body.setFont(new Font("Consolas", Font.PLAIN, 18));
         this.footer.setFont(new Font("Consolas", Font.PLAIN, 12));
         add(this.header,BorderLayout.PAGE_START);
         add(this.body,BorderLayout.CENTER);
@@ -41,7 +40,6 @@ public class CardPanel extends JPanel{
     }
     
     public final void update(String header,String body, String footer){
-
         this.header.setText(header);
         this.body.setText(body);
         this.footer.setText(footer);

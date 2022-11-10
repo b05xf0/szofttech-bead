@@ -4,6 +4,7 @@ import model.map.Map;
 import model.player.Player;
 import model.field.Field;
 import java.awt.Point;
+import model.common.Unit;
 
 public class GameManager {
     private static final int ACTION_POINTS = 100;
@@ -15,6 +16,7 @@ public class GameManager {
     private GameState state;
     private final Map map;
     private Field selectedField;
+    private Unit selectedUnit;
     public GameManager(){
         state = GameState.SETUP;
         map = new Map();
@@ -36,7 +38,10 @@ public class GameManager {
     
     public Field getSelectedField() { return selectedField; }
     
+    public Unit getSelectedUnit() { return selectedUnit; }
+    
     public void selectField(Point pos) { selectedField = map.getField(pos); }
+    public void selectUnit(Unit unit) { selectedUnit = unit; }
     
     private void switchPlayer() { this.playerIdx = this.playerIdx == 1 ? 0 : 1; }
     

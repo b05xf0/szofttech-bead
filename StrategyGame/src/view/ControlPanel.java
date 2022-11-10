@@ -26,7 +26,7 @@ public class ControlPanel extends JPanel{
         setVisible(false);
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-	JLabel label = new JLabel("3rd milestone");
+	JLabel label = new JLabel(" ");
 	c.fill = GridBagConstraints.HORIZONTAL;
 	c.ipady = 0;       //reset to default
 	c.weighty = 1.0;   //request any extra vertical space
@@ -47,13 +47,13 @@ public class ControlPanel extends JPanel{
         add(p, c);
     }
 
-    /*
+/*    
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(getParent().getHeight()/2, getParent().getHeight()/4);
+        return new Dimension(getParent().getWidth() - getParent().getHeight(), getParent().getHeight());
     } 
-    */
-
+    
+*/
 }
 
 
