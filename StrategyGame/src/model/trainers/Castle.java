@@ -5,7 +5,9 @@
 package model.trainers;
 
 
+import commands.TrainFarmerCommand;
 import commands.TrainMinerCommand;
+import commands.TrainWoodcutterCommand;
 import java.util.LinkedList;
 import java.util.List;
 import model.common.ActionCommand;
@@ -42,7 +44,7 @@ public class Castle extends Trainer {
     
     @Override
     public boolean isHQ() {
-        return false;
+        return true;
     }
     
     @Override
@@ -56,32 +58,32 @@ public class Castle extends Trainer {
     
     public Miner trainMiner() {
         Miner unit = new Miner(position, player);
+        player.getTreasury().decrement(unit.cost());
         position.addUnit(unit);
         player.addUnit(unit);
-        player.getTreasury().decrement(unit.cost());
         return unit;
     }
     
     public Woodcutter trainWoodcutter() {
         Woodcutter unit = new Woodcutter(position, player);
+        player.getTreasury().decrement(unit.cost());
         position.addUnit(unit);
         player.addUnit(unit);
-        player.getTreasury().decrement(unit.cost());
         return unit;
     }
     
     public Farmer trainFarmer() {
         Farmer unit = new Farmer(position, player);
+        player.getTreasury().decrement(unit.cost());
         position.addUnit(unit);
         player.addUnit(unit);
-        player.getTreasury().decrement(unit.cost());
         return unit;
     }
 
     @Override
     public final void populateActions() {
         actions.add(new TrainMinerCommand(this));
-        //actions.add(new TrainMinerCommand(this));
-        //actions.add(new TrainMinerCommand(this));
+        actions.add(new TrainWoodcutterCommand(this));
+        actions.add(new TrainFarmerCommand(this));
     }
 }

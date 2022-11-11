@@ -10,4 +10,6 @@ package model.interfaces;
  */
 public interface ICommand/*<T>*/ {
     public /*T*/void execute();
+    
+    public boolean needTarget();
 }

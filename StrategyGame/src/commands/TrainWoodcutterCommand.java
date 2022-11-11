@@ -6,22 +6,21 @@ package commands;
 
 import model.interfaces.ICommand;
 import model.trainers.Castle;
-import model.workers.Miner;
 
 /**
  *
  * @author laszl
  */
-public class TrainMinerCommand implements ICommand {
+public class TrainWoodcutterCommand implements ICommand {
     private final Castle castle;
     
-    public TrainMinerCommand(Castle castle){
+    public TrainWoodcutterCommand(Castle castle){
         this.castle = castle;
     }
     
     @Override
     public void execute() {
-        this.castle.trainMiner();
+        this.castle.trainWoodcutter();
     }
 
     @Override
@@ -31,7 +30,7 @@ public class TrainMinerCommand implements ICommand {
     
     @Override
     public String toString(){
-        return "Train Miner";
+        return "Train Woodcutter";
     }
     
 }

@@ -6,52 +6,28 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
-import javax.swing.JLabel;
+import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+
 
 /**
  *
  * @author laszl
  */
+
 public class CardPanel extends JPanel{
-    JLabel header, body, footer;
     public CardPanel(){
+        super();
+        setVisible(false);
         setOpaque(true);
         setBackground(new Color(0,0,0,16));
         setLayout(new BorderLayout());
-        this.header = new JLabel();
-        this.body = new JLabel();
-        this.footer = new JLabel();
-        this.header.setBorder(new EmptyBorder(10,10,10,10));
-        this.body.setBorder(new EmptyBorder(10,10,10,10));
-        this.footer.setBorder(new EmptyBorder(10,10,10,10));
-        this.header.setFont(new Font("Consolas", Font.PLAIN, 12));
-        this.body.setFont(new Font("Consolas", Font.PLAIN, 18));
-        this.footer.setFont(new Font("Consolas", Font.PLAIN, 12));
-        add(this.header,BorderLayout.PAGE_START);
-        add(this.body,BorderLayout.CENTER);
-        add(this.footer,BorderLayout.PAGE_END);
     }
-    public CardPanel(String header,String body, String footer){
+    public CardPanel(JButton button){
         this();
-        update(header,body,footer);
+        //add((new GridPanel(0,1)).add(button),BorderLayout.LINE_END);
+        add(button,BorderLayout.LINE_END);
     }
-    
-    public final void update(String header,String body, String footer){
-        this.header.setText(header);
-        this.body.setText(body);
-        this.footer.setText(footer);
-        //.validate();
-    }
-    /*
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(getParent().getHeight()/2, getParent().getHeight()/4);
-    } 
-    */
-
 }
 
 

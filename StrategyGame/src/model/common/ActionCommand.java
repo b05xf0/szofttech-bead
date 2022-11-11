@@ -20,7 +20,10 @@ public class ActionCommand/*<T>*/ implements ICommand {
     public ActionCommand(/*Callable*/Runnable execute){
         this._execute = execute;
     }
-    
+    @Override
+    public boolean needTarget(){
+        return false;
+    }  
     @Override
     public /*T*/void execute() {
         try {

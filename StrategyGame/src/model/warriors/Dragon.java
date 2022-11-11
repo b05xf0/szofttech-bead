@@ -59,4 +59,8 @@ public class Dragon extends Warrior implements IMovable {
     public void populateActions() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    @Override
+    public final String getStats(){
+        return String.format("Attack: %s | Defence: %s | Movement: %s", ATTACK.toString(),DEFENCE.toString(),MOVEMENT.toString());
+    } 
 }

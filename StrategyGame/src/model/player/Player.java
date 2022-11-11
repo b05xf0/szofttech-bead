@@ -10,11 +10,12 @@ import model.warriors.*;
 import model.workers.*;
 
 public class Player {
-    
+    public static final int ACTION_POINTS = 100;    
     private String name;
     private final int idx;
     private final Field startPos;
     private final Stock treasury;
+    private int actionPoints;
     private final List<Extractor> extractors;
     private final List<Trainer> trainers;
     private final List<Warrior> warriors;
@@ -51,8 +52,9 @@ public class Player {
         for(Extractor u : extractors){u.getPosition().addUnit(u); u.setTimer(0);}
         for(Worker u : workers){u.getPosition().addUnit(u); u.setTimer(0);}
         for(Warrior u : warriors){u.getPosition().addUnit(u); u.setTimer(0);}
+        actionPoints = ACTION_POINTS;
     }
-    
+    public int getAPs() { return actionPoints; }
     public void addUnit(Extractor u) { extractors.add(u); }
     public void addUnit(Trainer u) { trainers.add(u); }
     public void addUnit(Warrior u) { warriors.add(u); }
@@ -65,6 +67,6 @@ public class Player {
     
     @Override
     public String toString() {
-        return String.format("%s", name);
+        return String.format("%s - APs: %d", name, actionPoints);
     }
 }

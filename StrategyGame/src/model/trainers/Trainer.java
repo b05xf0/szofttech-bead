@@ -39,4 +39,8 @@ public abstract class Trainer extends Unit{
     @Override
     public final Stock getBaseCost(){ return BASECOST; }
     
+    @Override
+    public final String getStats(){
+        return isHQ() ? "HQ" : " ";
+    }
 }

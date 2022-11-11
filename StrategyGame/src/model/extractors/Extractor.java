@@ -51,4 +51,9 @@ public abstract class Extractor extends Unit{
     public abstract Stock getResources();
     public abstract int getHC();
     
+    @Override
+    public final String getStats(){
+        return String.format("HC: %d", getHC());
+    }
+    
 }

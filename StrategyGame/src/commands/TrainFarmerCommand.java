@@ -6,32 +6,31 @@ package commands;
 
 import model.interfaces.ICommand;
 import model.trainers.Castle;
-import model.workers.Miner;
 
 /**
  *
  * @author laszl
  */
-public class TrainMinerCommand implements ICommand {
+public class TrainFarmerCommand implements ICommand {
     private final Castle castle;
     
-    public TrainMinerCommand(Castle castle){
+    public TrainFarmerCommand(Castle castle){
         this.castle = castle;
     }
     
     @Override
     public void execute() {
-        this.castle.trainMiner();
+        this.castle.trainFarmer();
     }
 
     @Override
     public boolean needTarget(){
         return false;
-    }  
-    
+    }    
+
     @Override
     public String toString(){
-        return "Train Miner";
+        return "Train Farmer";
     }
     
 }

@@ -10,6 +10,9 @@ import model.common.Unit;
 import model.common.UnitState;
 import model.field.Field;
 import model.interfaces.IMovable;
+import static model.workers.Worker.ATTACK;
+import static model.workers.Worker.DEFENCE;
+import static model.workers.Worker.MOVEMENT;
 
 /**
  *
@@ -48,5 +51,4 @@ public abstract class Warrior extends Unit implements IMovable {
     public final Stock getBaseCost(){ return BASECOST; }
     
     public abstract int getRank();
-   
 }

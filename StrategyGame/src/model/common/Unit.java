@@ -80,6 +80,7 @@ public abstract class Unit {
     
     protected abstract Stock getBaseCost();
     public abstract int getHPValue();
+    public abstract String getStats();
     
     @Override
     public String toString(){

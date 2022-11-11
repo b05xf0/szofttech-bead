@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 public class ControlPanel extends JPanel{
     private int rowNum = 0;
     public ControlPanel(){
+        super();
         setVisible(false);
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();

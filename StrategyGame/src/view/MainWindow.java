@@ -33,26 +33,38 @@ import model.GameManager;
 import model.GameState;
 import model.common.Unit;
 import model.interfaces.ICommand;
+import model.player.Player;
 import model.trainers.Trainer;
 import model.workers.Worker;
+import view.InfoLabel.LabelSize;
 
 public class MainWindow extends JFrame {
 
     private final GameManager game;
     
     private final MapPanel map;
+   
+    private final ControlPanel ctrl = new ControlPanel();
     
-    private final CardPanel playerInfo;
-    private final CardPanel fieldInfo;
-    private final CardPanel unitCtrl;
-    private final CardPanel actionCtrl;
-    private final JButton endTurnButton;
-    private final ControlPanel ctrl;
-    private final JPanel units;
-    private JPanel actions;
+    private final CommandButton endTurnButton = new CommandButton("End Turn"),
+                                executeCommandButton = new CommandButton("Execute");
+    
+    private final CardPanel playerPanel = new CardPanel(endTurnButton),
+                            commandPanel = new CardPanel(executeCommandButton),
+                            unitsPanel = new CardPanel(),
+                            actionsPanel = new CardPanel(),
+                            targetUnitsPanel = new CardPanel();
+    
+    private final GridPanel units = new GridPanel(0, 6),
+                            actions  = new GridPanel(0, 6),
+                            commandElements = new GridPanel(0,5);
+    
+    private final InfoLabel playerInfo = new InfoLabel(LabelSize.XL," "),
+                            gameInfo = new InfoLabel(LabelSize.L," "),
+                            treasuryInfo = new InfoLabel(LabelSize.L," "),
+                            gameState = new InfoLabel(LabelSize.M," ");
     
     public MainWindow() throws IOException {
-        game = new GameManager();
 
         setTitle("Strategy Game");
 
@@ -69,31 +81,51 @@ public class MainWindow extends JFrame {
         setJMenuBar(createMenuBar());
 
         getContentPane().setLayout(new BorderLayout());
-	JLabel label = new JLabel("3rd milestone");
         
-        map = createMapPanel();
-        playerInfo = new CardPanel();
-        fieldInfo = new CardPanel();
-        unitCtrl = new CardPanel("Units","","");
-        actionCtrl = new CardPanel("Actions","","");
-
-        playerInfo.setVisible(false);
-        fieldInfo.setVisible(false);
-        unitCtrl.setVisible(false);
-        actionCtrl.setVisible(false);
-
-        endTurnButton = new JButton("End Turn");
-        units = createUnitsPanel();
-        actions = createActionsPanel();
-        ctrl = createControlPanel();        
-
-        unitCtrl.add(units,BorderLayout.CENTER);
-        actionCtrl.add(actions,BorderLayout.CENTER);
+        game = new GameManager();        
         
-        ctrl.addPanel(playerInfo);
-        ctrl.addPanel(fieldInfo);
-        ctrl.addPanel(unitCtrl);
-        ctrl.addPanel(actionCtrl);
+        map = new MapPanel(game);
+        map.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                switch(game.getState()) {
+                    case SELECT_FIELD, SELECT_UNIT, SELECT_ACTION, EXECUTION -> game.selectField(map.getPosition(e.getX(),e.getY()));
+                    case SELECT_TARGETFIELD, SELECT_TARGETUNIT -> game.selectTargetField(map.getPosition(e.getX(),e.getY()));
+                    default -> {}
+                }
+                updateWindow();
+            }
+                
+        });
+
+        endTurnButton.addActionListener((ActionEvent e) -> {
+            game.endTurn();
+            updateWindow();
+        });
+        
+        executeCommandButton.addActionListener((ActionEvent e) -> {
+            game.getSelectedCommand().execute();
+            updateWindow();
+        });    
+
+        playerPanel.add(gameInfo,BorderLayout.PAGE_START);
+        playerPanel.add(playerInfo,BorderLayout.CENTER);
+        playerPanel.add(treasuryInfo,BorderLayout.PAGE_END);
+        
+        commandPanel.add(new InfoLabel(LabelSize.M,"Command"),BorderLayout.PAGE_START);
+        commandPanel.add(commandElements,BorderLayout.CENTER);
+        commandPanel.add(gameState,BorderLayout.PAGE_END);
+       
+        unitsPanel.add(new InfoLabel(LabelSize.M,"Units"),BorderLayout.PAGE_START);
+        unitsPanel.add(units,BorderLayout.CENTER);
+
+        actionsPanel.add(new InfoLabel(LabelSize.M,"Actions"),BorderLayout.PAGE_START);
+        actionsPanel.add(actions,BorderLayout.CENTER);
+        
+        ctrl.addPanel(playerPanel);
+        ctrl.addPanel(commandPanel);
+        ctrl.addPanel(unitsPanel);
+        ctrl.addPanel(actionsPanel);
         
         getContentPane().add(ctrl, BorderLayout.CENTER);
         getContentPane().add(map, BorderLayout.LINE_END);
@@ -101,14 +133,129 @@ public class MainWindow extends JFrame {
 
         setExtendedState( JFrame.MAXIMIZED_BOTH );
         //setResizable(false);
-        setMinimumSize(new Dimension(800,600));
-        pack();
+        setMinimumSize(new Dimension(1280,720));
+        //pack();
         setLocationRelativeTo(null);
         setVisible(true);
         startGame();
         
     }
 
+    private void updateWindow(){
+        map.repaint();
+        ctrl.setVisible(false);
+        playerPanel.setVisible(false);
+        commandPanel.setVisible(false);
+        unitsPanel.setVisible(false);
+        actionsPanel.setVisible(false);
+        
+        switch(game.getState()) {
+            case SELECT_FIELD -> updatePlayerPanel();
+            case SELECT_UNIT -> updateUnitsPanel();
+            case SELECT_ACTION -> updateActionsPanel();
+            case SELECT_TARGETFIELD -> {}
+            case SELECT_TARGETUNIT -> {}
+            case EXECUTION -> updateActionsPanel();
+            default -> {}
+        }
+        ctrl.setVisible(true);
+    }
+    
+    private void updateCommandPanel(){
+        commandElements.removeAll();
+        //executeCommandButton.setVisible(false);
+        executeCommandButton.setEnabled(false);
+        if(game.getSelectedField() != null){
+            CardPanel card = new CardPanel();
+            card.add(new InfoLabel(LabelSize.S,"Field"),BorderLayout.PAGE_START);
+            card.add(new InfoLabel(LabelSize.M,game.getSelectedField().toString()),BorderLayout.CENTER);
+            card.setVisible(true);
+            commandElements.add(card);
+        }
+        if(game.getSelectedUnit() != null){
+            CardPanel card = new CardPanel();
+            card.add(new InfoLabel(LabelSize.S,"Unit"),BorderLayout.PAGE_START);
+            card.add(new InfoLabel(LabelSize.M,game.getSelectedUnit().toString()),BorderLayout.CENTER);
+            card.setVisible(true);
+            commandElements.add(card);
+        }
+        if(game.getSelectedCommand() != null){
+            CardPanel card = new CardPanel();
+            card.add(new InfoLabel(LabelSize.S,"Action"),BorderLayout.PAGE_START);
+            card.add(new InfoLabel(LabelSize.M,game.getSelectedCommand().toString()),BorderLayout.CENTER);
+            card.setVisible(true);
+            commandElements.add(card);
+        }
+        executeCommandButton.setEnabled(game.getState() == GameState.EXECUTION);
+        gameState.setText(game.getState().toString());
+        commandPanel.setVisible(true);
+    }
+    
+    private void updatePlayerPanel(){
+        Player p = game.getCurrentPlayer();
+        playerInfo.setText(game.getCurrentPlayer().toString());
+        gameInfo.setText(game.toString());
+        treasuryInfo.setText(game.getCurrentPlayer().getTreasury().toString());
+        playerPanel.setVisible(true);
+        updateCommandPanel();
+    }
+
+    private void updateUnitsPanel(){
+        updatePlayerPanel();
+        units.removeAll();
+        for(Unit u : game.getSelectedField().getUnits()){
+            CardPanel card = new CardPanel();
+            card.add(new InfoLabel(LabelSize.S,String.format("Health: %d",u.getHealth())),BorderLayout.PAGE_START);
+            card.add(new InfoLabel(LabelSize.M,u.toString()),BorderLayout.CENTER);
+            card.add(new InfoLabel(LabelSize.S,u.getState().toString()),BorderLayout.PAGE_END);
+            card.setToolTipText(u.getStats());
+            if(u.equals(game.getSelectedUnit())){
+                card.setBorder(BorderFactory.createMatteBorder(3,3,3,3,Color.yellow));
+            } else {
+                card.setBorder(new EmptyBorder(3,3,3,3));
+            }
+            card.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    game.selectUnit(u);
+                    updateWindow();
+                }
+            });
+            card.setVisible(true);
+            units.add(card);
+        }
+        unitsPanel.setVisible(true);
+    }
+    
+    private void updateActionsPanel(){
+        updateUnitsPanel();
+        actions.removeAll();
+        
+        for(ICommand c : game.getSelectedUnit().getActions()){
+            CardPanel card = new CardPanel();
+            card.add(new InfoLabel(LabelSize.S," "),BorderLayout.PAGE_START);
+            card.add(new InfoLabel(LabelSize.M,c.toString()),BorderLayout.CENTER);
+            card.add(new InfoLabel(LabelSize.S," "),BorderLayout.PAGE_END);
+            if(c.equals(game.getSelectedCommand())){
+                card.setBorder(BorderFactory.createMatteBorder(3,3,3,3,Color.yellow));
+            } else {
+                card.setBorder(new EmptyBorder(3,3,3,3));
+            }
+            card.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    game.selectCommand(c);
+                    updateWindow();
+                }
+            });
+            card.setVisible(true);
+            actions.add(card);    
+        }
+        actionsPanel.setVisible(true);
+    }
+    
+
+    
     private void showExitConfirmation() {
         int n = JOptionPane.showConfirmDialog(this,
                 "Do you really want to exit?",
@@ -155,9 +302,7 @@ public class MainWindow extends JFrame {
     private void startGame(){
         showSettings();
         game.start();
-        playerInfo.setVisible(true);
-        map.repaint();
-        updatePlayerInfo();
+        updateWindow();
     }
     
     private JMenuBar createMenuBar(){
@@ -181,62 +326,7 @@ public class MainWindow extends JFrame {
         menuBar.add(menuGame);
         return menuBar;
     }
-    
-    private MapPanel createMapPanel() throws IOException{
-        MapPanel mapPanel = new MapPanel(game);
-        mapPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                switch(game.getState()) {
-                        case SELECTFIELD -> {
-                            game.selectField(map.getPosition(e.getX(),e.getY()));
-                            map.repaint();
-                            updateFieldInfo();
-                        }
-                        default -> {}
-                    }
-                }
-            });
-        return mapPanel;
-    }
-    
-    private ControlPanel createControlPanel() {
-        ControlPanel ctrlPanel = new ControlPanel();
-        JPanel btnContainer = new JPanel();
-        btnContainer.setOpaque(false);
-        btnContainer.setBorder(new EmptyBorder(5,5,5,5));
-        btnContainer.setLayout(new GridLayout(0,1,5,5));
-        btnContainer.add(endTurnButton);
-        playerInfo.add(btnContainer,BorderLayout.LINE_END);
-        endTurnButton.addActionListener((ActionEvent e) -> {
-            game.endTurn();
-            map.repaint();
-            updatePlayerInfo();
-            updateFieldInfo();
-            
-        });
-        return ctrlPanel;
-    }
-    private JPanel createUnitsPanel() {
-        JPanel unitsPanel = new JPanel();
-        unitsPanel.setOpaque(false);
-        unitsPanel.setVisible(false);
-        unitsPanel.setBorder(new EmptyBorder(5,5,5,5));
-        unitsPanel.setLayout(new GridLayout(0,3,5,5));
-        unitsPanel.setVisible(true);
-        return unitsPanel;
-    }
-    
-    private JPanel createActionsPanel(){
-        JPanel actionsPanel = new JPanel();
-        actionsPanel.setOpaque(false);
-        actionsPanel.setVisible(false);
-        actionsPanel.setBorder(new EmptyBorder(5,5,5,5));
-        actionsPanel.setLayout(new GridLayout(0,4,5,5));
-        actionsPanel.setVisible(true);
-        return actionsPanel;
-    }
-
+/*   
     private void updatePlayerInfo() {
         ctrl.setVisible(false);
         playerInfo.update(
@@ -317,12 +407,12 @@ public class MainWindow extends JFrame {
         ctrl.setVisible(false);
         //actionCtrl.setVisible(false);
         actions.removeAll();
-        /*
+        
         actions.add(new CardPanel("", "Train Peasant", ""));
         actions.add(new CardPanel("", "Train Swordsman", ""));
         actions.add(new CardPanel("", "Train Knight", ""));
         actions.add(new CardPanel("", "Train Dragon", ""));
-        */
+        
         for(ICommand c : t.getActions()){
             CardPanel command = new CardPanel("", c.toString(), "");
             actions.add(command);
@@ -349,7 +439,7 @@ public class MainWindow extends JFrame {
         actionCtrl.setVisible(true);
         ctrl.setVisible(true);
     }
-    
+    */
     public static void main(String[] args) throws IOException {
         MainWindow window = new MainWindow();
     }

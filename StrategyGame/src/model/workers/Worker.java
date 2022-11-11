@@ -95,7 +95,10 @@ public abstract class Worker extends Unit implements IMovable {
     
     @Override
     public final int getHPValue(){ return HP.getValue(); }
-    
-    
-}
 
+    @Override
+    public final String getStats(){
+        return String.format("Attack: %s | Defence: %s | Movement: %s", ATTACK.toString(),DEFENCE.toString(),MOVEMENT.toString());
+    }
+}    
+    

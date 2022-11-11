@@ -3,9 +3,11 @@ package model.field;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
+import model.common.Unit;
 import model.extractors.Extractor;
 import model.map.Map;
 import model.map.Orientation;
+import model.player.Player;
 import model.trainers.Trainer;
 import model.warriors.Warrior;
 import model.workers.Worker;
@@ -42,10 +44,32 @@ import model.workers.Worker;
     public FieldType getType() { return type; }
     public int getVariant() { return variant; }
     
+    public boolean hasUnits(){
+        return extractor != null 
+               || trainer  != null
+               || !workers.isEmpty()
+               || !warriors.isEmpty();
+    }
+    
     public List<Worker> getWorkers() { return workers; }
     public List<Warrior> getWarriors() { return warriors; }
     public Extractor getExtractor() { return extractor; }
     public Trainer getTrainer() { return trainer; }
+    
+    public List<Unit> getUnits(){
+        LinkedList<Unit> unitList = new LinkedList<>();
+        if(extractor != null) unitList.add(extractor);
+        if(trainer != null) unitList.add(trainer);
+        unitList.addAll(workers);
+        unitList.addAll(warriors);
+        //for(Worker w : workers) unitList.add(w);
+        //for(Warrior w : warriors) unitList.add(w);
+        return unitList;
+    }
+    public Player getOccupiedBy(){
+        return hasUnits() ? getUnits().get(0).getPlayer() : null;
+    }
+    
     public int getHighestRank() {
         int rank = 0;
         for(Warrior w: warriors)
@@ -111,7 +135,7 @@ import model.workers.Worker;
     }    
     @Override
     public String toString(){
-        return "(" + this.pos.x + ", " + this.pos.y + "): " + this.type + " (" + this.getOrientation() + ")";
+        return String.format("%s @(%d, %d)", type,pos.x,pos.y);
     
     }
     /*
