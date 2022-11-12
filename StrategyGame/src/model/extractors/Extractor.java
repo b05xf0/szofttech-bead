@@ -25,13 +25,18 @@ public abstract class Extractor extends Unit{
     
     public static final AttrLevel HP = AttrLevel.MEDIUM;
 
+    public final static Stock getCost(){
+        return (new Stock(BASECOST)).multiply(HP.getValue());
+    }
+    
     protected Extractor(Field position, Player player) {
         super(HP.getValue() * BASEHEALTH, position, player);
         this.timer = HP.getValue();
+        add();
     }
     
-    public Stock extract() {
-        return getResources().multiply(Math.min(getHC(),CAPACITY));
+    public void extract() {
+        player.getTreasury().increment(getResources().multiply(Math.min(getHC(),CAPACITY)));
     }
     
     @Override
@@ -40,20 +45,26 @@ public abstract class Extractor extends Unit{
         if(this.health <= 0) this.state = UnitState.DEAD;
     }
 
-    @Override
-    public final Stock getBaseCost(){ return BASECOST; }
-    
-    @Override
-    public final int getHPValue() {
-        return HP.getValue();
-    }
-    
     public abstract Stock getResources();
+
     public abstract int getHC();
     
     @Override
     public final String getStats(){
         return String.format("HC: %d", getHC());
     }
+    
+    @Override
+    public final void remove(){
+        this.position.removeUnit(this);
+        this.player.removeUnit(this);
+    }
+
+    @Override
+    public final void add(){
+        this.position.addUnit(this);
+        this.player.addUnit(this);
+    }
+
     
 }

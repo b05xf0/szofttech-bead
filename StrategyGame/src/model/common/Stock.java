@@ -4,6 +4,9 @@
  */
 package model.common;
 
+import commands.IllegalCommandException;
+import model.GameState;
+
 /**
  *
  * @author sonrisa
@@ -45,18 +48,21 @@ public class Stock {
     }
     
     public Stock increment(Stock s){
-        this.gold += s.getGold();
-        this.lumber += s.getLumber();
-        this.food += s.getFood();
+        this.gold += s.gold;
+        this.lumber += s.lumber;
+        this.food += s.food;
         
         return this;
     }
     
-    public Stock decrement(Stock s){
-        this.gold -= s.getGold();
-        this.lumber -= s.getLumber();
-        this.food -= s.getFood();
-        
+    public Stock decrement(Stock s) throws IllegalCommandException {
+        if(gold < s.gold || lumber < s.lumber || food < s.food){
+            throw new IllegalCommandException(GameState.ERR_NOT_ENOUGH_RESOURCES);
+        } else {
+            this.gold -= s.gold;
+            this.lumber -= s.lumber;
+            this.food -= s.food;
+        }
         return this;
     }
     

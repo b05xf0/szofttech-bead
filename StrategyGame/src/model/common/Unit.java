@@ -4,6 +4,7 @@
  */
 package model.common;
 
+import commands.ActionCommand;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +24,7 @@ public abstract class Unit {
     protected Field position;
     protected int health;
     protected UnitType type;
-    protected List<ICommand> actions; 
+    protected List<ActionCommand> actions; 
     
     protected Unit(int health, Field position, Player player){
         this.health = health;
@@ -33,11 +34,7 @@ public abstract class Unit {
         this.actions = new LinkedList<>();
     }
     
-    public List<ICommand> getActions() throws NullPointerException {
-        if(this.actions == null){
-            throw new NullPointerException("Actions cannot be null. Probably the populate method was not called in the constructor.");
-        }
-        
+    public List<ActionCommand> getActions(){
         return this.actions;
     }
     
@@ -53,8 +50,12 @@ public abstract class Unit {
         return this.player;
     }
     
-    public UnitState getState(){
-        return this.state;
+    public UnitState getState(){ return state; }
+    
+    public String getStateDisplay(){
+        return timer > 0 
+               ? String.format("%s(%d)", state, timer) 
+               : state.toString();
     }
     
     public UnitType getType(){
@@ -66,20 +67,17 @@ public abstract class Unit {
         state = (state != UnitState.DEAD && timer == 0) ? UnitState.READY : UnitState.BUSY;
     }
     
-    public void decrementTimer(int t){
-        if(this.timer > 0) setTimer(this.timer-1);
+    public void decrementTimer(){
+        if(this.timer > 0) setTimer(this.timer - 1);
     }
     
-    public abstract void populateActions();
     
     public abstract void defend(IMovable m);
     
-    public Stock cost() {
-        return (new Stock(getBaseCost())).multiply(getHPValue());
-    }
-    
-    protected abstract Stock getBaseCost();
-    public abstract int getHPValue();
+    public abstract void remove();
+
+    public abstract void add();
+
     public abstract String getStats();
     
     @Override

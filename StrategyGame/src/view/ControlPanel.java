@@ -24,6 +24,7 @@ public class ControlPanel extends JPanel{
     private int rowNum = 0;
     public ControlPanel(){
         super();
+        setOpaque(false);
         setVisible(false);
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();

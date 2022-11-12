@@ -4,6 +4,7 @@
  */
 package model.interfaces;
 
+import commands.IllegalCommandException;
 import model.common.Unit;
 import model.field.Field;
 
@@ -12,10 +13,10 @@ import model.field.Field;
  * @author sonrisa
  */
 public interface IMovable {
-    public int move(Field position);
-    public void attack(Unit unit);
+    public void move(Field targetField) throws IllegalCommandException;
+    public void attack(Unit targetUnit) throws IllegalCommandException;
     public int getAttackValue();
     public int getDefenceValue();
-    public int getMovementCost();
     public boolean canFly();
+    public int getRank();
 }

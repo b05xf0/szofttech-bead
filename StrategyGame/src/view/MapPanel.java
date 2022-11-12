@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import model.field.Field;
 import model.GameManager;
 import model.common.Unit;
+import model.field.FieldType;
 
 public class MapPanel extends JPanel {
     
@@ -21,6 +22,7 @@ public class MapPanel extends JPanel {
 
     public MapPanel(GameManager game) throws IOException{
         this.game = game;
+        setOpaque(false);
 
     }
     
@@ -40,7 +42,7 @@ public class MapPanel extends JPanel {
         super.paintComponent(gr);
         Graphics2D g = (Graphics2D) gr;
         int mapSize = game.getMap().getSize();
-        tileSize = getHeight() / (mapSize + 1);
+        tileSize = (getHeight()) / (mapSize + 1);
         offsetX = (getWidth() - mapSize * tileSize) / 2;
         offsetY = (getHeight() - mapSize * tileSize) / 2;
         for (int i = 0; i < mapSize; ++i) {
@@ -62,19 +64,20 @@ public class MapPanel extends JPanel {
                     default -> TileSet.drawCamp(building.getPlayer().getIndex(),tileSize, pos, g, this);
                 }
                 if (!field.getWorkers().isEmpty()) {
-                    if(building == null)
+                    if(building == null && field.getType() == FieldType.GRASS)
                         TileSet.drawUnit(field.getWorkers().get(0).getPlayer().getIndex(),0,tileSize, pos, g, this);
                     else
                         TileSet.drawSmallUnit(field.getWorkers().get(0).getPlayer().getIndex(),0,tileSize, pos, g, this);
                 }
                 if (!field.getWarriors().isEmpty()) {
-                    if(building == null)
+                    if(building == null && field.getType() == FieldType.GRASS)
                         TileSet.drawUnit(field.getWarriors().get(0).getPlayer().getIndex(),field.getHighestRank(),tileSize, pos, g, this);
                     else    
                         TileSet.drawSmallUnit(field.getWarriors().get(0).getPlayer().getIndex(),field.getHighestRank(),tileSize, pos, g, this);
                 }                    
 
                 if (field.equals(game.getSelectedField())) TileSet.drawSelection(tileSize,  pos, g, this);
+                if (field.equals(game.getSelectedTargetField())) TileSet.drawTargetSelection(tileSize,  pos, g, this);
             
             }
         }

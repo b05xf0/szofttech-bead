@@ -4,12 +4,16 @@
  */
 package model.interfaces;
 
+import commands.IllegalCommandException;
+import model.common.Unit;
+import model.field.Field;
+
 /**
  *
  * @author sonrisa
  */
 public interface ICommand/*<T>*/ {
-    public /*T*/void execute();
-    
-    public boolean needTarget();
+    //public /*T*/String execute();
+    void run(Field targetField,Unit targetUnit) throws IllegalCommandException;
+    //public boolean needTarget();
 }

@@ -1,8 +1,11 @@
 package model.player;
 
+import commands.IllegalCommandException;
 import java.util.LinkedList;
 import java.util.List;
+import model.GameState;
 import model.common.Stock;
+import model.common.Unit;
 import model.extractors.*;
 import model.field.Field;
 import model.trainers.*;
@@ -33,9 +36,13 @@ public class Player {
     }
     
     public String getName() { return this.name; }
+    
     public void setName(String name) { this.name = name; }
+    
     public int getIndex() { return idx; }
+    
     public Stock getTreasury() { return treasury; }
+    
     public final void init(){
         this.extractors.clear();
         this.trainers.clear();
@@ -43,18 +50,52 @@ public class Player {
         this.workers.clear();
         this.treasury.init();
 
-        addUnit(new Castle(startPos,this));
-        addUnit(new Miner(startPos,this));
-        addUnit(new Woodcutter(startPos,this));
-        addUnit(new Farmer(startPos,this));
+        Castle.create(startPos,this);
+        Miner.create(startPos,this);
+        Woodcutter.create(startPos,this);
+        Farmer.create(startPos,this);
+       
+        for(Unit u : getUnits()) u.setTimer(0);
         
-        for(Trainer u : trainers){u.getPosition().addUnit(u); u.setTimer(0);}
-        for(Extractor u : extractors){u.getPosition().addUnit(u); u.setTimer(0);}
-        for(Worker u : workers){u.getPosition().addUnit(u); u.setTimer(0);}
-        for(Warrior u : warriors){u.getPosition().addUnit(u); u.setTimer(0);}
         actionPoints = ACTION_POINTS;
     }
+    
+    public void endTurn(){
+        for(Unit u : getUnits()){
+            switch(u.getState()){
+                case BUSY -> u.decrementTimer();
+                case DEAD -> u.remove();
+                default -> {}
+            }
+        }
+        for(Extractor e : extractors) e.extract();
+        actionPoints = ACTION_POINTS;
+    }
+    
+    public boolean hasHQ(){
+        for(Trainer t : trainers)
+            if(t.isHQ()) return true;
+        return false;
+    }
+    
+    public List<Unit> getUnits(){
+        List<Unit> units = new LinkedList<>();
+        units.addAll(trainers);
+        units.addAll(extractors);
+        units.addAll(workers);
+        units.addAll(warriors);
+        return units;
+    }
     public int getAPs() { return actionPoints; }
+    
+    public void decrementAPs(int n) throws IllegalCommandException {
+        if(n > actionPoints){
+            throw new IllegalCommandException(GameState.ERR_TARGET_IS_TOO_FAR);
+        } else {
+            actionPoints -= n;
+        }
+    }
+    
     public void addUnit(Extractor u) { extractors.add(u); }
     public void addUnit(Trainer u) { trainers.add(u); }
     public void addUnit(Warrior u) { warriors.add(u); }

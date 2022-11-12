@@ -7,6 +7,7 @@ import model.player.Player;
 import model.common.Stock;
 import model.common.UnitType;
 import model.field.Field;
+import model.workers.Worker;
 
 /**
  *
@@ -15,6 +16,10 @@ import model.field.Field;
 public class Hut extends Extractor {
     private static final Stock RESOURCES = new Stock(0,10,0);
 
+    public static Hut create(Field position, Player player){
+        return new Hut(position, player);
+    }
+    
     public Hut(Field position, Player player) {
         super(position, player);
         type = UnitType.HUT;
@@ -27,11 +32,11 @@ public class Hut extends Extractor {
 
     @Override
     public int getHC() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int counter = 0;
+        for(Worker w : position.getWorkers()){
+            if(w.canCut()) ++counter;
+        }
+        return counter;
     }
 
-    @Override
-    public void populateActions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

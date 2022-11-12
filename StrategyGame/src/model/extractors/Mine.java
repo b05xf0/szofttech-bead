@@ -7,6 +7,7 @@ import model.player.Player;
 import model.common.Stock;
 import model.common.UnitType;
 import model.field.Field;
+import model.workers.Worker;
 
 /**
  *
@@ -16,6 +17,10 @@ public class Mine extends Extractor {
     
     private static final Stock RESOURCES = new Stock(10,0,0);
 
+    public static Mine create(Field position, Player player){
+        return new Mine(position, player);
+    }
+    
     public Mine(Field position, Player player) {
         super(position, player);
         type = UnitType.MINE;
@@ -28,12 +33,11 @@ public class Mine extends Extractor {
 
     @Override
     public int getHC() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void populateActions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int counter = 0;
+        for(Worker w : position.getWorkers()){
+            if(w.canMine()) ++counter;
+        }
+        return counter;
     }
     
 }

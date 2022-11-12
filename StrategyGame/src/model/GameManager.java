@@ -4,7 +4,10 @@ import model.map.Map;
 import model.player.Player;
 import model.field.Field;
 import java.awt.Point;
+import commands.ActionCommand;
+import commands.IllegalCommandException;
 import model.common.Unit;
+import model.common.UnitState;
 import model.interfaces.ICommand;
 
 public class GameManager {
@@ -19,7 +22,7 @@ public class GameManager {
     private Field selectedTargetField;
     private Unit selectedUnit;
     private Unit selectedTargetUnit;
-    private ICommand selectedCommand;
+    private ActionCommand selectedCommand;
     
     public GameManager(){
         state = GameState.SETUP;
@@ -36,20 +39,35 @@ public class GameManager {
     
     public int getTurn() { return turn; }
     
-    public int getAPs() { return players[this.playerIdx].getAPs();}
+    public int getAPs() { return getCurrentPlayer().getAPs();}
     
     public Map getMap() { return map; }
     
     public Field getSelectedField() { return selectedField; }
     
+    public Field getSelectedTargetField() { return selectedTargetField; }
+    
     public Unit getSelectedUnit() { return selectedUnit; }
     
-    public ICommand getSelectedCommand() { return selectedCommand; }
+    public Unit getSelectedTargetUnit() { return selectedTargetUnit; }
+    
+    public ActionCommand getSelectedCommand() { return selectedCommand; }
+    
+    public void executeCommand(){
+       try {
+            selectedCommand.execute(selectedTargetField,selectedTargetUnit);
+            selectField(selectedField.getPos());
+        } catch (IllegalCommandException ex) {
+            state = ex.getErrState();
+        }
+    }
     
     public void selectField(Point pos) {
         selectedField = map.getField(pos);
         selectedUnit = null;
         selectedCommand = null;
+        selectedTargetField = null;
+        selectedTargetUnit = null;
         if(selectedField.hasUnits()) {
             state = GameState.SELECT_UNIT;
         }
@@ -59,13 +77,22 @@ public class GameManager {
     }
 
     public void selectTargetField(Point pos) {
+        selectedTargetUnit = null;
         selectedTargetField = map.getField(pos);
-        if(selectedField.hasUnits()) state = GameState.SELECT_TARGETUNIT;
+        if(selectedCommand.needTargetUnit()
+           && selectedField.hasUnits()){
+            state = GameState.SELECT_TARGETUNIT;
+        }else{
+            state = GameState.EXECUTION;
+        }
     }    
     
     public void selectUnit(Unit unit) {
         selectedCommand = null;
-        if(getCurrentPlayer().equals(unit.getPlayer())){
+        selectedTargetField = null;
+        selectedTargetUnit = null;
+        if(getCurrentPlayer().equals(unit.getPlayer())
+           && unit.getState() == UnitState.READY){
             selectedUnit = unit;
             if(!selectedUnit.getActions().isEmpty()){
                 state = GameState.SELECT_ACTION;
@@ -75,16 +102,23 @@ public class GameManager {
         }
     }
     
-    public void selectCommand(ICommand command) {
+    public void selectCommand(ActionCommand command) {
         selectedCommand = command;
-        if(!selectedCommand.needTarget()) {
-            state = GameState.EXECUTION;
+        if(selectedCommand.needTargetField()) {
+            state = GameState.SELECT_TARGETFIELD;
         } else {
-            state = GameState.SELECT_ACTION;
+            state = GameState.EXECUTION;
         }
     }
     
-    
+    public void selectTargetUnit(Unit unit) {
+        if(!getCurrentPlayer().equals(unit.getPlayer())){
+            selectedTargetUnit = unit;
+            state = GameState.EXECUTION;
+        } else {
+            state = GameState.SELECT_TARGETUNIT;
+        }
+    }    
     private void switchPlayer() { this.playerIdx = this.playerIdx == 1 ? 0 : 1; }
     
     public void start(){
@@ -94,16 +128,18 @@ public class GameManager {
         map.init();
         players[0].init();
         players[1].init();
-        state = GameState.SELECT_FIELD;
-        //TODO
+        selectField(getCurrentPlayer().getUnits().get(0).getPosition().getPos());
     }
     public void endTurn(){
-        if(playerIdx == 1) ++turn;
+        getCurrentPlayer().endTurn();
         switchPlayer();
+        if(playerIdx == 0) ++turn;
         selectedField = null;
         selectedUnit = null;
         selectedCommand = null;
-        state = GameState.SELECT_FIELD;
+        selectedTargetField = null;
+        selectedTargetUnit = null;
+        selectField(getCurrentPlayer().getUnits().get(0).getPosition().getPos());
     }
     
     @Override

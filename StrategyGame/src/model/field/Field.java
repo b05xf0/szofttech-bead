@@ -22,6 +22,7 @@ import model.workers.Worker;
     private Trainer trainer;
     private final List<Worker> workers;
     private final List<Warrior> warriors;
+    private int movementCost = 0;
 
     
     public Field(Map map, Point pos, FieldType type){
@@ -66,6 +67,14 @@ import model.workers.Worker;
         //for(Warrior w : warriors) unitList.add(w);
         return unitList;
     }
+    public Point getPos(){
+        return new Point(pos);
+    }
+    
+    public String getPosDisplay(){
+        return String.format("@(%d, %d)", pos.x,pos.y);
+    }
+    
     public Player getOccupiedBy(){
         return hasUnits() ? getUnits().get(0).getPlayer() : null;
     }
@@ -132,10 +141,15 @@ import model.workers.Worker;
         if(trainer != null) return trainer.toString();
         if(extractor != null) return extractor.toString();
         return "Empty";
-    }    
+    }
+
+    public int getMovementCost() { return movementCost; }
+    
+    public void setMovementCost(int c) { movementCost = c; }
+    
     @Override
     public String toString(){
-        return String.format("%s @(%d, %d)", type,pos.x,pos.y);
+        return String.format("%s", type);
     
     }
     /*

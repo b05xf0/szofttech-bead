@@ -5,7 +5,11 @@
 package model.trainers;
 
 
+import commands.ActionCommand;
+import commands.IllegalCommandException;
 import model.common.AttrLevel;
+import model.common.Stock;
+import model.common.Unit;
 import model.player.Player;
 import model.common.UnitState;
 import model.common.UnitType;
@@ -22,61 +26,49 @@ import model.warriors.Swordsman;
 
 public class Barracks extends Trainer{
     public static final AttrLevel HP = AttrLevel.MEDIUM;
+
+    public final static Stock getCost(){
+        return (new Stock(BASECOST)).multiply(HP.getValue());
+    }
+    public static Barracks create(Field position, Player player){
+        return new Barracks(position, player);
+    }
     
     public Barracks(Field position, Player player) {
         super(HP.getValue() * BASEHEALTH, position, player);
         this.timer = HP.getValue();
         type = UnitType.BARRACKS;
+        populateActions();
     }
    
-    @Override
-    public final int getHPValue() {
-        return HP.getValue();
-    }
-    
-    
-    public boolean canTrainPeasant() {
-        return true;
-    }
-    
-    
-    public boolean canTrainSwordsman() {
-        return true;
-    }
-    
-    
-    public boolean canTrainKnight() {
-        return true;
-
-    }
-    
-   
-    public boolean canTrainDragon() {
-        return true;
-    }
-    
-    public Peasant trainPeasant() {
+    public void trainPeasant() throws IllegalCommandException {
+        player.getTreasury().decrement(Peasant.getCost());
         setTimer(Peasant.HP.getValue());
-        return new Peasant(position, player);
+        Peasant.create(position, player);
     }
     
-    public Swordsman trainSwordsman() {
+    public void trainSwordsman() throws IllegalCommandException {
+        player.getTreasury().decrement(Swordsman.getCost());
         setTimer(Swordsman.HP.getValue());
-        return new Swordsman(position, player);
+        Swordsman.create(position, player);
     }
     
-    public Knight trainKnight() {
+    public void trainKnight() throws IllegalCommandException {
+        player.getTreasury().decrement(Knight.getCost());
         setTimer(Knight.HP.getValue());
-        return new Knight(position, player);
+        Knight.create(position, player);
     }
     
-    public Dragon trainDragon() {
+    public void trainDragon() throws IllegalCommandException{
+        player.getTreasury().decrement(Dragon.getCost());
         setTimer(Dragon.HP.getValue());
-        return new Dragon(position, player);
+        Dragon.create(position, player);
     }
-
-    @Override
-    public void populateActions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public final void populateActions() {
+        actions.add(new ActionCommand((Field f,Unit u)->this.trainPeasant(),"Train Peasant"));
+        actions.add(new ActionCommand((Field f,Unit u)->this.trainSwordsman(),"Train Swordsman"));
+        actions.add(new ActionCommand((Field f,Unit u)->this.trainKnight(),"Train Knigth"));
+        actions.add(new ActionCommand((Field f,Unit u)->this.trainDragon(),"Train Dragon"));
     }
+    
 }

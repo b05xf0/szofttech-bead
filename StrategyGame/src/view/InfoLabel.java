@@ -4,6 +4,7 @@
  */
 package view;
 
+import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
@@ -28,5 +29,6 @@ public class InfoLabel extends JLabel {
             case XL -> setFont(new Font("Consolas", Font.PLAIN, 24));
             default -> {}
         }
+        setForeground(new Color(101, 64, 26)); 
     }
 }
