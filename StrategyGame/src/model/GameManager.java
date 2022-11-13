@@ -56,6 +56,7 @@ public class GameManager {
     public void executeCommand(){
        try {
             selectedCommand.execute(selectedTargetField,selectedTargetUnit);
+            map.initMovementCosts(0);
             selectField(selectedField.getPos());
         } catch (IllegalCommandException ex) {
             state = ex.getErrState();
@@ -68,6 +69,7 @@ public class GameManager {
         selectedCommand = null;
         selectedTargetField = null;
         selectedTargetUnit = null;
+        map.initMovementCosts(0);
         if(selectedField.hasUnits()) {
             state = GameState.SELECT_UNIT;
         }
@@ -78,12 +80,15 @@ public class GameManager {
 
     public void selectTargetField(Point pos) {
         selectedTargetUnit = null;
-        selectedTargetField = map.getField(pos);
-        if(selectedCommand.needTargetUnit()
-           && selectedField.hasUnits()){
-            state = GameState.SELECT_TARGETUNIT;
-        }else{
-            state = GameState.EXECUTION;
+        
+        if(map.getField(pos).isValidTarget(getCurrentPlayer()) && getCurrentPlayer().getAPs() >= map.getField(pos).getMovementCost()){
+            selectedTargetField = map.getField(pos);
+            if(selectedCommand.needTargetUnit()
+               && selectedField.hasUnits()){
+                state = GameState.SELECT_TARGETUNIT;
+            }else{
+                state = GameState.EXECUTION;
+            }
         }
     }    
     
@@ -91,6 +96,7 @@ public class GameManager {
         selectedCommand = null;
         selectedTargetField = null;
         selectedTargetUnit = null;
+        map.initMovementCosts(0);
         if(getCurrentPlayer().equals(unit.getPlayer())
            && unit.getState() == UnitState.READY){
             selectedUnit = unit;
@@ -104,7 +110,11 @@ public class GameManager {
     
     public void selectCommand(ActionCommand command) {
         selectedCommand = command;
+        selectedTargetField = null;
+        selectedTargetUnit = null;
+        map.initMovementCosts(0);
         if(selectedCommand.needTargetField()) {
+            map.setMovementCosts(selectedUnit);
             state = GameState.SELECT_TARGETFIELD;
         } else {
             state = GameState.EXECUTION;

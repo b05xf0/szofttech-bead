@@ -21,7 +21,7 @@ public class Peasant extends Warrior implements IMovable {
     public static final AttrLevel ATTACK = AttrLevel.LOW;
     public static final AttrLevel DEFENCE = AttrLevel.LOWEST;
     public static final AttrLevel MOVEMENT = AttrLevel.MEDIUM;   
-    public final static Stock getCost(){
+    public final static Stock COST(){
         return (new Stock(BASECOST)).multiply(HP.getValue());
     }
     public static Peasant create(Field position, Player player){
@@ -34,7 +34,10 @@ public class Peasant extends Warrior implements IMovable {
         type = UnitType.PEASANT;
     }
 
-
+    @Override
+    public final int getMovementCost(){
+        return (10 - MOVEMENT.getValue());
+    }
     @Override
     public int getAttackValue(){
         return ATTACK.getValue()*10;

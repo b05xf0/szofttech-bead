@@ -11,6 +11,7 @@ import model.common.UnitType;
 import model.field.Field;
 import model.interfaces.IMovable;
 import model.player.Player;
+import static model.workers.Worker.HP;
 
 /**
  *
@@ -22,7 +23,7 @@ public class Swordsman extends Warrior implements IMovable {
     public static final AttrLevel ATTACK = AttrLevel.MEDIUM;
     public static final AttrLevel DEFENCE = AttrLevel.HIGH;
     public static final AttrLevel MOVEMENT = AttrLevel.LOW;   
-    public final static Stock getCost(){
+    public final static Stock COST(){
         return (new Stock(BASECOST)).multiply(HP.getValue());
     }
     public static Swordsman create(Field position, Player player){
@@ -35,7 +36,10 @@ public class Swordsman extends Warrior implements IMovable {
         type = UnitType.SWORDSMAN;
     }
     
-
+    @Override
+    public final int getMovementCost(){
+        return (10 - MOVEMENT.getValue());
+    }
     @Override
     public boolean canFly() {
         return false;

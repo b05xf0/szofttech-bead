@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 import model.common.Unit;
 import model.common.UnitState;
 import model.field.Field;
@@ -25,10 +26,11 @@ public class CardPanel extends JPanel{
         setOpaque(true);
         setBackground(new Color(255,255,255,127));
         setLayout(new BorderLayout());
+        setBorder(new EmptyBorder(5,5,5,5));
     }
     public CardPanel(JButton button){
         this();
-        //add((new GridPanel(0,1)).add(button),BorderLayout.LINE_END);
+        //add((new JPanel().add(button)),BorderLayout.LINE_END);
         add(button,BorderLayout.LINE_END);
     }
     public CardPanel(Unit unit){

@@ -17,6 +17,7 @@ public interface IMovable {
     public void attack(Unit targetUnit) throws IllegalCommandException;
     public int getAttackValue();
     public int getDefenceValue();
+    public int getMovementCost();
     public boolean canFly();
     public int getRank();
 }

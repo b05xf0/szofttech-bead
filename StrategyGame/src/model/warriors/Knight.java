@@ -21,7 +21,7 @@ public class Knight extends Warrior implements IMovable {
     public static final AttrLevel ATTACK = AttrLevel.HIGH;
     public static final AttrLevel DEFENCE = AttrLevel.HIGH;
     public static final AttrLevel MOVEMENT = AttrLevel.HIGH;   
-    public final static Stock getCost(){
+    public final static Stock COST(){
         return (new Stock(BASECOST)).multiply(HP.getValue());
     }
     public static Knight create(Field position, Player player){
@@ -33,7 +33,10 @@ public class Knight extends Warrior implements IMovable {
         type = UnitType.KNIGHT;
     }
 
-
+    @Override
+    public final int getMovementCost(){
+        return (10 - MOVEMENT.getValue());
+    }
     @Override
     public int getAttackValue(){
         return ATTACK.getValue()*10;

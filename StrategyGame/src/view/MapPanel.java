@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -48,6 +49,8 @@ public class MapPanel extends JPanel {
         for (int i = 0; i < mapSize; ++i) {
             for (int j = 0; j < mapSize; ++j) {
                 Field field = game.getMap().getField(new Point(i,j));
+                
+                
                 Point pos = new Point(i * tileSize + offsetX,j * tileSize + offsetY); 
                 Unit building;
                 switch (field.getType()) {
@@ -78,7 +81,12 @@ public class MapPanel extends JPanel {
 
                 if (field.equals(game.getSelectedField())) TileSet.drawSelection(tileSize,  pos, g, this);
                 if (field.equals(game.getSelectedTargetField())) TileSet.drawTargetSelection(tileSize,  pos, g, this);
-            
+                
+                if(!field.isValidTarget(game.getCurrentPlayer()) || game.getCurrentPlayer().getAPs() < field.getMovementCost()){
+                        g.setColor(new Color(0,0,0,127));
+                        g.fillRect(pos.x,pos.y,tileSize,tileSize);
+                }
+                
             }
         }
         

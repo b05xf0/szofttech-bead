@@ -4,7 +4,12 @@ import model.field.FieldType;
 import model.field.Field;
 import java.awt.Point;
 import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
+import model.common.Unit;
+import model.interfaces.IMovable;
 import resources.ResourceLoader;
 
 public class Map {
@@ -58,4 +63,30 @@ public class Map {
     public int getSize() { return size; }
     
     public Field getStartingPosition(int idx) { return startPos[idx]; }
+    
+    public void initMovementCosts(int c){
+         for(int i = 0; i < size; ++i)
+            for(int j = 0; j < size; ++j)
+                fields[i][j].setMovementCost(c);   
+    }
+    
+    public void setMovementCosts(Unit unit){
+        final int INFINITY = Integer.MAX_VALUE;
+        List<Field> q = new LinkedList<>();
+        Field s = unit.getPosition();
+        int c = ((IMovable) unit).getMovementCost();
+        boolean unitCanFly = ((IMovable) unit).canFly();
+        initMovementCosts(INFINITY);
+        s.setMovementCost(0);
+        q.add(s);
+        while(!q.isEmpty()){
+            Field u = q.remove(0);
+            for(Field v : u.getNeighbours(unitCanFly,unit.getPlayer())){
+                if(v.getMovementCost() == INFINITY){
+                    v.setMovementCost(u.getMovementCost() + c);
+                    q.add(v);
+                }
+            }
+        }
+    }
 }

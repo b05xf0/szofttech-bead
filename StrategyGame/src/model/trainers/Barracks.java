@@ -42,25 +42,25 @@ public class Barracks extends Trainer{
     }
    
     public void trainPeasant() throws IllegalCommandException {
-        player.getTreasury().decrement(Peasant.getCost());
+        player.getTreasury().decrement(Peasant.COST());
         setTimer(Peasant.HP.getValue());
         Peasant.create(position, player);
     }
     
     public void trainSwordsman() throws IllegalCommandException {
-        player.getTreasury().decrement(Swordsman.getCost());
+        player.getTreasury().decrement(Swordsman.COST());
         setTimer(Swordsman.HP.getValue());
         Swordsman.create(position, player);
     }
     
     public void trainKnight() throws IllegalCommandException {
-        player.getTreasury().decrement(Knight.getCost());
+        player.getTreasury().decrement(Knight.COST());
         setTimer(Knight.HP.getValue());
         Knight.create(position, player);
     }
     
     public void trainDragon() throws IllegalCommandException{
-        player.getTreasury().decrement(Dragon.getCost());
+        player.getTreasury().decrement(Dragon.COST());
         setTimer(Dragon.HP.getValue());
         Dragon.create(position, player);
     }

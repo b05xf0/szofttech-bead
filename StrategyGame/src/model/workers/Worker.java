@@ -30,13 +30,9 @@ public abstract class Worker extends Unit implements IMovable {
     public final static AttrLevel ATTACK = AttrLevel.LOWEST;
     public final static AttrLevel DEFENCE = AttrLevel.LOWEST;
     public final static AttrLevel MOVEMENT = AttrLevel.MEDIUM;
-
-    public final static Stock getCost(){
+   
+    public final static Stock COST(){
         return (new Stock(BASECOST)).multiply(HP.getValue());
-    }
-
-    public final static int getMovementCost(){
-        return (10 - MOVEMENT.getValue());
     }
     
     protected Worker(Field position, Player player) {
@@ -45,9 +41,14 @@ public abstract class Worker extends Unit implements IMovable {
         add();
     }
 
+    @Override
+    public final int getMovementCost(){
+        return (10 - MOVEMENT.getValue());
+    }
    
     @Override
     public void move(Field targetField) throws IllegalCommandException{
+        System.out.println(targetField.getMovementCost());
         player.decrementAPs(targetField.getMovementCost());
         this.position.removeUnit(this);
         this.position = targetField;

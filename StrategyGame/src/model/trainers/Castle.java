@@ -50,19 +50,19 @@ public class Castle extends Trainer {
     }
     
     public void trainMiner() throws IllegalCommandException {
-        player.getTreasury().decrement(Miner.getCost());
+        player.getTreasury().decrement(Miner.COST());
         setTimer(Miner.HP.getValue());
         Miner.create(position, player);
     }
     
     public void trainWoodcutter() throws IllegalCommandException {
-        player.getTreasury().decrement(Woodcutter.getCost());
+        player.getTreasury().decrement(Woodcutter.COST());
         setTimer(Woodcutter.HP.getValue());
         Woodcutter.create(position, player);
     }
     
     public void trainFarmer() throws IllegalCommandException {
-        player.getTreasury().decrement(Farmer.getCost());
+        player.getTreasury().decrement(Farmer.COST());
         setTimer(Farmer.HP.getValue());
         Farmer.create(position, player);
     }

@@ -105,6 +105,11 @@ import model.workers.Worker;
     public Field getFieldToSouth() { return getFieldToSouth(1); }
     public Field getFieldToEast() { return getFieldToEast(1); }
     public Field getFieldToWest() { return getFieldToWest(1); }
+
+    public Field getFieldToNorthEast() { return getFieldToNorth(1).getFieldToEast(1); }
+    public Field getFieldToSouthEast() { return getFieldToSouth(1).getFieldToEast(1); }
+    public Field getFieldToSouthWest() { return getFieldToSouth(1).getFieldToWest(1); }
+    public Field getFieldToNorthWest() { return getFieldToNorth(1).getFieldToWest(1); }
     
     public boolean isOnBorder() { return getFieldToNorth() == null || getFieldToSouth() == null || getFieldToEast() == null || getFieldToWest() == null; }
     
@@ -146,6 +151,28 @@ import model.workers.Worker;
     public int getMovementCost() { return movementCost; }
     
     public void setMovementCost(int c) { movementCost = c; }
+    
+    public List<Field> getNeighbours(boolean unitCanFly, Player player){
+        List<Field> neighbours = new LinkedList<>();
+        for(int i = -1;i <= 1; ++i){
+            for(int j = -1; j <= 1; ++j){
+                Field neighbour = map.getField(new Point(pos.x + i, pos.y + j));
+                if(neighbour != null &&
+                    (unitCanFly || neighbour.isValidTarget(player))){
+                    neighbours.add(neighbour);
+                }
+            }
+        }
+        return neighbours;
+    }
+    
+    public boolean isValidTarget(Player player){
+    
+    return movementCost == 0 ||
+          (type != FieldType.RIVER && type != FieldType.WALL &&
+          (getOccupiedBy() == null || player.equals(getOccupiedBy())));
+    
+    }
     
     @Override
     public String toString(){

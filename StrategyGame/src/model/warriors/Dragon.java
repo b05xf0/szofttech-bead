@@ -22,7 +22,7 @@ public class Dragon extends Warrior implements IMovable {
     public static final AttrLevel DEFENCE = AttrLevel.HIGH;
     public static final AttrLevel MOVEMENT = AttrLevel.HIGHEST;   
     
-    public final static Stock getCost(){
+    public final static Stock COST(){
         return (new Stock(BASECOST)).multiply(HP.getValue());
     }
     public static Dragon create(Field position, Player player){
@@ -35,6 +35,10 @@ public class Dragon extends Warrior implements IMovable {
         type = UnitType.DRAGON;
     }
 
+    @Override
+    public final int getMovementCost(){
+        return (10 - MOVEMENT.getValue());
+    }    
     @Override
     public boolean canFly() {
         return true;
