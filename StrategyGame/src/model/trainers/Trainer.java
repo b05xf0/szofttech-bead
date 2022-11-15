@@ -9,9 +9,9 @@ import model.common.Stock;
 import model.common.Unit;
 import model.common.UnitState;
 import model.field.Field;
-import model.interfaces.ICommand;
 import model.interfaces.IMovable;
 import model.player.Player;
+import model.interfaces.IRunnableWithException;
 
 /**
  *
@@ -24,7 +24,6 @@ public abstract class Trainer extends Unit{
     
     protected Trainer(int health, Field position, Player player) {
         super(health, position, player);
-        add();
     }
     
     public boolean isHQ() {
@@ -40,7 +39,7 @@ public abstract class Trainer extends Unit{
    
     @Override
     public final String getStats(){
-        return isHQ() ? "HQ" : " ";
+        return isHQ() ? "HQ" : "";
     }
     @Override
     public final void remove(){

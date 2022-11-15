@@ -158,7 +158,7 @@ import model.workers.Worker;
             for(int j = -1; j <= 1; ++j){
                 Field neighbour = map.getField(new Point(pos.x + i, pos.y + j));
                 if(neighbour != null &&
-                    (unitCanFly || neighbour.isValidTarget(player))){
+                    (unitCanFly || (neighbour.isValidTarget(player)))){
                     neighbours.add(neighbour);
                 }
             }
@@ -166,11 +166,26 @@ import model.workers.Worker;
         return neighbours;
     }
     
+    public List<Field> getNeighboursWithEnemies(Player player){
+        List<Field> neighbours = new LinkedList<>();
+        for(int i = -1;i <= 1; ++i){
+            for(int j = -1; j <= 1; ++j){
+                Field neighbour = map.getField(new Point(pos.x + i, pos.y + j));
+                if(neighbour != null &&
+                   neighbour.getOccupiedBy() != null &&
+                   !getOccupiedBy().equals(neighbour.getOccupiedBy())){
+                    neighbours.add(neighbour);
+                }
+            }
+        }
+        return neighbours;
+    }
+
     public boolean isValidTarget(Player player){
     
-    return movementCost == 0 ||
-          (type != FieldType.RIVER && type != FieldType.WALL &&
-          (getOccupiedBy() == null || player.equals(getOccupiedBy())));
+    return type != FieldType.RIVER && type != FieldType.WALL  &&
+                                   (getOccupiedBy() == null ||
+                                    player.equals(getOccupiedBy()));
     
     }
     
@@ -179,27 +194,4 @@ import model.workers.Worker;
         return String.format("%s", type);
     
     }
-    /*
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.pos);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Field other = (Field) obj;
-        return Objects.equals(this.pos, other.pos);
-    }
- */   
 }

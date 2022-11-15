@@ -53,9 +53,9 @@ public class ProfilePanel extends JPanel {
         if(unit != null){
             int playerIdx = unit.getPlayer().getIndex();
             switch(unit.getType()){
-                case CASTLE -> TileSet.drawCastle(playerIdx,size, pos, g, this);
-                case BARRACKS -> TileSet.drawBarracks(playerIdx,size, pos, g, this);
-                case MINE,HUT,FARM -> TileSet.drawCamp(playerIdx,size, pos, g, this);
+                case "Castle" -> TileSet.drawCastle(playerIdx,size, pos, g, this);
+                case "Barracks" -> TileSet.drawBarracks(playerIdx,size, pos, g, this);
+                case "Mine","Hut","Farm" -> TileSet.drawCamp(playerIdx,size, pos, g, this);
                 default -> TileSet.drawUnit(playerIdx,((IMovable)unit).getRank(),size, pos, g, this);        
             }
         }

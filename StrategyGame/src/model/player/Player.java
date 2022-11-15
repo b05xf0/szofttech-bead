@@ -11,6 +11,7 @@ import model.field.Field;
 import model.trainers.*;
 import model.warriors.*;
 import model.workers.*;
+import static model.Configuration.*;
 
 public class Player {
     public static final int ACTION_POINTS = 100;    
@@ -32,7 +33,7 @@ public class Player {
         this.trainers = new LinkedList<>();
         this.warriors = new LinkedList<>();
         this.workers = new LinkedList<>();
-        this.treasury = new Stock();
+        this.treasury = new Stock(INIT_GOLD,INIT_LUMBER,INIT_FOOD);
     }
     
     public String getName() { return this.name; }
@@ -48,12 +49,17 @@ public class Player {
         this.trainers.clear();
         this.warriors.clear();
         this.workers.clear();
-        this.treasury.init();
+        this.treasury.init(INIT_GOLD,INIT_LUMBER,INIT_FOOD);
 
         Castle.create(startPos,this);
-        Miner.create(startPos,this);
-        Woodcutter.create(startPos,this);
-        Farmer.create(startPos,this);
+               
+        for(int i = 0; i < INIT_MINERS; ++i) Miner.create(startPos,this);
+        for(int i = 0; i < INIT_WOODCUTTERS; ++i) Woodcutter.create(startPos,this);
+        for(int i = 0; i < INIT_FARMERS; ++i) Farmer.create(startPos,this);
+        for(int i = 0; i < INIT_PEASANTS; ++i) Peasant.create(startPos,this);
+        for(int i = 0; i < INIT_SWORDSMEN; ++i) Swordsman.create(startPos,this);
+        for(int i = 0; i < INIT_KNIGHTS; ++i) Knight.create(startPos,this);
+        for(int i = 0; i < INIT_DRAGONS; ++i) Dragon.create(startPos,this);
        
         for(Unit u : getUnits()) u.setTimer(0);
         
@@ -78,6 +84,11 @@ public class Player {
         return false;
     }
     
+    public void setStrikeBack(boolean c){
+        for(Worker w : workers) w.setStrikeBack(c);
+        for(Warrior w : warriors) w.setStrikeBack(c);
+    }
+ 
     public List<Unit> getUnits(){
         List<Unit> units = new LinkedList<>();
         units.addAll(trainers);
@@ -88,7 +99,7 @@ public class Player {
     }
     public int getAPs() { return actionPoints; }
     
-    public void decrementAPs(int n) throws IllegalCommandException {
+    public void decreaseAPs(int n) throws IllegalCommandException {
         if(n > actionPoints){
             throw new IllegalCommandException(GameState.ERR_TARGET_IS_TOO_FAR);
         } else {

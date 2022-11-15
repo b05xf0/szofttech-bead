@@ -1,18 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.trainers;
 
-
+import static model.Configuration.*;
 import commands.ActionCommand;
 import commands.IllegalCommandException;
-import model.common.AttrLevel;
+import model.GameState;
 import model.common.Stock;
-import model.common.Unit;
 import model.player.Player;
-import model.common.UnitState;
-import model.common.UnitType;
 import model.field.Field;
 import model.warriors.Dragon;
 import model.warriors.Knight;
@@ -23,52 +16,48 @@ import model.warriors.Swordsman;
  *
  * @author sonrisa
  */
+public class Barracks extends Trainer {
 
-public class Barracks extends Trainer{
-    public static final AttrLevel HP = AttrLevel.MEDIUM;
+    public final static Stock COST = calcMovableCost(BARRACKS_HP);
 
-    public final static Stock getCost(){
-        return (new Stock(BASECOST)).multiply(HP.getValue());
-    }
-    public static Barracks create(Field position, Player player){
-        return new Barracks(position, player);
+    public static void create(Field position, Player player){
+        (new Barracks(position, player)).add();
     }
     
-    public Barracks(Field position, Player player) {
-        super(HP.getValue() * BASEHEALTH, position, player);
-        this.timer = HP.getValue();
-        type = UnitType.BARRACKS;
+    private Barracks(Field position, Player player) {
+        super(calcBuildingHealth(BARRACKS_HP), position, player);
+        this.timer = BARRACKS_HP.getValue();
         populateActions();
     }
-   
+
     public void trainPeasant() throws IllegalCommandException {
-        player.getTreasury().decrement(Peasant.COST());
-        setTimer(Peasant.HP.getValue());
+        player.getTreasury().decrease(Peasant.COST);
+        setTimer(PEASANT_HP.getValue());
         Peasant.create(position, player);
     }
-    
+
     public void trainSwordsman() throws IllegalCommandException {
-        player.getTreasury().decrement(Swordsman.COST());
-        setTimer(Swordsman.HP.getValue());
+        player.getTreasury().decrease(Swordsman.COST);
+        setTimer(SWORDSMAN_HP.getValue());
         Swordsman.create(position, player);
     }
-    
+
     public void trainKnight() throws IllegalCommandException {
-        player.getTreasury().decrement(Knight.COST());
-        setTimer(Knight.HP.getValue());
+        player.getTreasury().decrease(Knight.COST);
+        setTimer(KNIGHT_HP.getValue());
         Knight.create(position, player);
     }
-    
-    public void trainDragon() throws IllegalCommandException{
-        player.getTreasury().decrement(Dragon.COST());
-        setTimer(Dragon.HP.getValue());
+
+    public void trainDragon() throws IllegalCommandException {
+        player.getTreasury().decrease(Dragon.COST);
+        setTimer(DRAGON_HP.getValue());
         Dragon.create(position, player);
     }
+
     public final void populateActions() {
-        actions.add(new ActionCommand((Field f,Unit u)->this.trainPeasant(),"Train Peasant"));
-        actions.add(new ActionCommand((Field f,Unit u)->this.trainSwordsman(),"Train Swordsman"));
-        actions.add(new ActionCommand((Field f,Unit u)->this.trainKnight(),"Train Knigth"));
-        actions.add(new ActionCommand((Field f,Unit u)->this.trainDragon(),"Train Dragon"));
+        actions.add(new ActionCommand((Object o)->trainPeasant(), "Train Peasant", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->trainSwordsman(), "Train Swordsman", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->trainKnight(), "Train Knigth", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->trainDragon(), "Train Dragon", GameState.EXECUTION));
     }
-    
 }

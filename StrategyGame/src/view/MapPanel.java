@@ -10,6 +10,7 @@ import static java.lang.Math.min;
 import javax.swing.JPanel;
 import model.field.Field;
 import model.GameManager;
+import model.GameState;
 import model.common.Unit;
 import model.field.FieldType;
 
@@ -62,8 +63,8 @@ public class MapPanel extends JPanel {
                     case BRIDGE -> TileSet.drawBridge(field.getVariant(),field.getOrientation(),tileSize,  pos, g, this);
                 }
                 if ((building = field.getTrainer()) != null || (building = field.getExtractor()) != null ) switch(building.getType()){
-                    case CASTLE -> TileSet.drawCastle(building.getPlayer().getIndex(),tileSize, pos, g, this);
-                    case BARRACKS -> TileSet.drawBarracks(building.getPlayer().getIndex(),tileSize, pos, g, this);
+                    case "Castle" -> TileSet.drawCastle(building.getPlayer().getIndex(),tileSize, pos, g, this);
+                    case "Barracks" -> TileSet.drawBarracks(building.getPlayer().getIndex(),tileSize, pos, g, this);
                     default -> TileSet.drawCamp(building.getPlayer().getIndex(),tileSize, pos, g, this);
                 }
                 if (!field.getWorkers().isEmpty()) {
@@ -82,7 +83,8 @@ public class MapPanel extends JPanel {
                 if (field.equals(game.getSelectedField())) TileSet.drawSelection(tileSize,  pos, g, this);
                 if (field.equals(game.getSelectedTargetField())) TileSet.drawTargetSelection(tileSize,  pos, g, this);
                 
-                if(!field.isValidTarget(game.getCurrentPlayer()) || game.getCurrentPlayer().getAPs() < field.getMovementCost()){
+                if((game.getState() == GameState.MOVE_SELECT_TARGETFIELD && (game.getCurrentPlayer().getAPs() < field.getMovementCost() || !field.isValidTarget(game.getCurrentPlayer()) ) ) ||
+                        (game.getState() == GameState.ATTACK_SELECT_TARGETFIELD && field.getMovementCost() == Integer.MAX_VALUE)){
                         g.setColor(new Color(0,0,0,127));
                         g.fillRect(pos.x,pos.y,tileSize,tileSize);
                 }

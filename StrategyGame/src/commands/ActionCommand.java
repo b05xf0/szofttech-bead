@@ -4,9 +4,11 @@
  */
 package commands;
 
+import java.util.Objects;
+import model.GameState;
 import model.common.Unit;
 import model.field.Field;
-import model.interfaces.ICommand;
+import model.interfaces.IRunnableWithException;
 
 /**
  *
@@ -14,22 +16,46 @@ import model.interfaces.ICommand;
  */
 public class ActionCommand {
     
-    private final ICommand executable;
+    protected final IRunnableWithException executable;
     private final String name;
+    private final GameState nextState;
+    private Field targetField;
+    private Unit targetUnit;
     
-    public ActionCommand(ICommand executable, String name){
+    public ActionCommand(IRunnableWithException executable, String name, GameState nextState){
         this.executable = executable;
         this.name = name;
+        this.nextState = nextState;
     }
     
-    public boolean needTargetField() { return false; }
-    
-    public boolean needTargetUnit() { return false; }
-   
-    public void execute(Field targetField, Unit targetUnit) throws IllegalCommandException {
-        this.executable.run(targetField,targetUnit);
+    public void execute() throws IllegalCommandException {
+        this.executable.run(targetUnit != null
+                            ? targetUnit
+                            : targetField != null
+                                ? targetField
+                                : null
+        );
     }
+    
+     public void setTargetField(Field targetField){
+        this.targetField = targetField;
+    }
+    
+    public Field getTargetField(){
+        return targetField;
+    }
+    
+    public void setTargetUnit(Unit targetUnit){
+        this.targetUnit = targetUnit;
+    }
+    
+    public Unit getTargetUnit(){
+        return targetUnit;
+    }
+
+    public GameState getNextState(){ return nextState; }
     
     @Override
     public String toString(){ return name; }
+    
 }

@@ -82,11 +82,31 @@ public class Map {
         while(!q.isEmpty()){
             Field u = q.remove(0);
             for(Field v : u.getNeighbours(unitCanFly,unit.getPlayer())){
-                if(v.getMovementCost() == INFINITY){
+                if(v.getMovementCost() == INFINITY && u.getMovementCost() < unit.getPlayer().getAPs()){
                     v.setMovementCost(u.getMovementCost() + c);
                     q.add(v);
                 }
             }
         }
+    }
+    
+    public void setAttackMode(Unit unit){
+        final int INFINITY = Integer.MAX_VALUE;
+        List<Field> q = new LinkedList<>();
+        Field s = unit.getPosition();
+        int c = 1;
+        initMovementCosts(INFINITY);
+        s.setMovementCost(0);
+        q.add(s);
+        while(!q.isEmpty()){
+            Field u = q.remove(0);
+            for(Field v : u.getNeighboursWithEnemies(unit.getPlayer())){
+                if(v.getMovementCost() == INFINITY && u.getMovementCost() < 1){
+                    v.setMovementCost(u.getMovementCost() + c);
+                    q.add(v);
+                }
+            }
+        }
+    
     }
 }

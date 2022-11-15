@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import model.common.Unit;
-import model.common.UnitState;
 import model.field.Field;
 
 
@@ -24,7 +23,7 @@ public class CardPanel extends JPanel{
         super();
         setVisible(false);
         setOpaque(true);
-        setBackground(new Color(255,255,255,127));
+        setBackground(new Color(253, 242, 231,223));
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(5,5,5,5));
     }

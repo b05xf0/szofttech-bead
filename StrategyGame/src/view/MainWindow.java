@@ -33,15 +33,15 @@ import javax.swing.border.EmptyBorder;
 import model.GameManager;
 import model.GameState;
 import model.common.Unit;
-import model.interfaces.ICommand;
 import model.player.Player;
-import model.trainers.Trainer;
-import model.workers.Worker;
 import view.InfoLabel.LabelSize;
+
 
 public class MainWindow extends JFrame {
 
     private final GameManager game;
+    
+    private final BackgroundPanel bg = new BackgroundPanel();
     
     private final MapPanel map;
    
@@ -83,7 +83,7 @@ public class MainWindow extends JFrame {
         setJMenuBar(createMenuBar());
 
         getContentPane().setLayout(new BorderLayout());
-        getContentPane().setBackground(new Color(205, 133, 63));
+        //getContentPane().setBackground(new Color(205, 133, 63));
         
         game = new GameManager();        
         
@@ -93,7 +93,7 @@ public class MainWindow extends JFrame {
             public void mousePressed(MouseEvent e) {
                 switch(game.getState()) {
                     case SELECT_FIELD, SELECT_UNIT, SELECT_ACTION, EXECUTION -> game.selectField(map.getPosition(e.getX(),e.getY()));
-                    case SELECT_TARGETFIELD, SELECT_TARGETUNIT -> game.selectTargetField(map.getPosition(e.getX(),e.getY()));
+                    case MOVE_SELECT_TARGETFIELD,ATTACK_SELECT_TARGETFIELD,SELECT_TARGETUNIT -> game.selectTargetField(map.getPosition(e.getX(),e.getY()));
                     default -> {}
                 }
                 updateWindow();
@@ -134,8 +134,12 @@ public class MainWindow extends JFrame {
         ctrl.addPanel(actionsPanel);
         ctrl.addPanel(targetUnitsPanel);
         
-        getContentPane().add(ctrl, BorderLayout.CENTER);
-        getContentPane().add(map, BorderLayout.LINE_END);
+        //getContentPane().add(ctrl, BorderLayout.CENTER);
+        //getContentPane().add(map, BorderLayout.LINE_END);
+        bg.add(ctrl, BorderLayout.CENTER);
+        bg.add(map, BorderLayout.LINE_END);
+        
+        getContentPane().add(bg, BorderLayout.CENTER);
         ctrl.setVisible(true);
 
         setExtendedState( JFrame.MAXIMIZED_BOTH );
@@ -161,9 +165,9 @@ public class MainWindow extends JFrame {
             case SELECT_FIELD -> updatePlayerPanel();
             case SELECT_UNIT -> updateUnitsPanel();
             case SELECT_ACTION -> updateActionsPanel();
-            case SELECT_TARGETFIELD -> updateActionsPanel();
+            case MOVE_SELECT_TARGETFIELD, ATTACK_SELECT_TARGETFIELD -> updateActionsPanel();
             case SELECT_TARGETUNIT -> updateTargetUnitsPanel();
-            case EXECUTION -> updateActionsPanel();
+            case EXECUTION -> {if(game.getSelectedTargetUnit()!=null) updateTargetUnitsPanel(); else updateActionsPanel();}
             default -> updateActionsPanel();
         }
         ctrl.setVisible(true);
@@ -210,7 +214,7 @@ public class MainWindow extends JFrame {
             CardPanel card = new CardPanel(game.getSelectedTargetUnit());
             card.add(new InfoLabel(LabelSize.S,"Target Unit"),BorderLayout.PAGE_START);
             card.add(new InfoLabel(LabelSize.M,game.getSelectedTargetUnit().toString()),BorderLayout.CENTER);
-            card.add(new InfoLabel(LabelSize.S," "),BorderLayout.PAGE_END);
+            card.add(new InfoLabel(LabelSize.S,(game.getSelectedTargetUnit().canStrikeBack() ? "Can Strike Back" : "")),BorderLayout.PAGE_END);
             card.setVisible(true);
             commandElements.add(card);
         }        
@@ -235,7 +239,7 @@ public class MainWindow extends JFrame {
             CardPanel card = new CardPanel(u);
             card.add(new InfoLabel(LabelSize.S,String.format("Health: %d",u.getHealth())),BorderLayout.PAGE_START);
             card.add(new InfoLabel(LabelSize.M,u.toString()),BorderLayout.CENTER);
-            card.add(new InfoLabel(LabelSize.S,u.getStateDisplay()),BorderLayout.PAGE_END);
+            card.add(new InfoLabel(LabelSize.S,u.getStateWithTimer()),BorderLayout.PAGE_END);
             card.setToolTipText(u.getStats());
             if(u.equals(game.getSelectedUnit())){
                 card.setBorder(BorderFactory.createMatteBorder(3,3,3,3,Color.yellow));
@@ -288,7 +292,7 @@ public class MainWindow extends JFrame {
             CardPanel card = new CardPanel(u);
             card.add(new InfoLabel(LabelSize.S,String.format("Health: %d",u.getHealth())),BorderLayout.PAGE_START);
             card.add(new InfoLabel(LabelSize.M,u.toString()),BorderLayout.CENTER);
-            card.add(new InfoLabel(LabelSize.S,u.getStateDisplay()),BorderLayout.PAGE_END);
+            card.add(new InfoLabel(LabelSize.S,u.getStateWithTimer()),BorderLayout.PAGE_END);
             card.setToolTipText(u.getStats());
             if(u.equals(game.getSelectedTargetUnit())){
                 card.setBorder(BorderFactory.createMatteBorder(3,3,3,3,Color.yellow));
