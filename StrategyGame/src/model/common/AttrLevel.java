@@ -14,14 +14,14 @@ public enum AttrLevel {
     MEDIUM(3),
     HIGH(4),
     HIGHEST(5);
-    
-    private int value;
-    
-    AttrLevel(int value){
+
+    private final int value;
+
+    AttrLevel(int value) {
         this.value = value;
     }
-    
-    public int getValue(){
+
+    public int getValue() {
         return value;
     }
 }

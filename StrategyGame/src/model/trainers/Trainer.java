@@ -9,9 +9,9 @@ import model.common.Stock;
 import model.common.Unit;
 import model.common.UnitState;
 import model.field.Field;
-import model.interfaces.ICommand;
 import model.interfaces.IMovable;
 import model.player.Player;
+import model.interfaces.IRunnableWithException;
 
 /**
  *
@@ -19,7 +19,7 @@ import model.player.Player;
  */
 public abstract class Trainer extends Unit{
     
-    private static final Stock BASECOST = new Stock(100,100,0);
+    protected static final Stock BASECOST = new Stock(100,100,0);
     protected static final int BASEHEALTH = 200;
     
     protected Trainer(int health, Field position, Player player) {
@@ -36,7 +36,21 @@ public abstract class Trainer extends Unit{
         if(this.health <= 0) this.state = UnitState.DEAD;
     }
     
+   
     @Override
-    public final Stock getBaseCost(){ return BASECOST; }
-    
+    public final String getStats(){
+        return isHQ() ? "HQ" : "";
+    }
+    @Override
+    public final void remove(){
+        this.position.removeUnit(this);
+        this.player.removeUnit(this);
+    }
+
+    @Override
+    public final void add(){
+        this.position.addUnit(this);
+        this.player.addUnit(this);
+    }    
+ 
 }

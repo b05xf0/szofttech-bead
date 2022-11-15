@@ -1,10 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.workers;
 
-import model.common.UnitType;
+import static model.Configuration.*;
+import commands.ActionCommand;
+import commands.IllegalCommandException;
+import model.GameState;
+import model.common.Unit;
+import model.common.UnitState;
 import model.extractors.Farm;
 import model.field.FieldType;
 import model.player.Player;
@@ -17,23 +18,36 @@ import model.field.Field;
  */
 public class Farmer extends Worker {
 
-    public Farmer(Field position, Player player) {
+    public static void create(Field position, Player player){
+        (new Farmer(position, player)).add();
+    }
+    
+    private Farmer(Field position, Player player) {
         super(position, player);
-        type = UnitType.FARMER;
+        populateActions();
     }
     
     @Override
     public boolean canFarm(){
-        return position.getType() == FieldType.GRASS;
+        return position.getType() == FieldType.GRASS
+               && state == UnitState.READY;
     }
     
-    public Farm buildFarm(){
-        setTimer(Farm.HP.getValue());
-        return new Farm(position, player);
+    public void buildFarm() throws IllegalCommandException{
+        if(canFarm() && canBuild()){
+            player.getTreasury().decrease(Farm.COST);
+            setTimer(EXTRACTOR_HP.getValue());
+            Farm.create(position, player);
+        } else {
+            throw new IllegalCommandException(GameState.ERR_CANNOT_BUILD);
+        }
     }
 
-    @Override
-    public void populateActions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public final void populateActions() {
+        actions.add(new ActionCommand((Object o)->buildFarm(), "Build Farm", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->buildCastle(), "Build Castle", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->buildBarracks(), "Build Barracks", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->move((Field)o), "Move", GameState.MOVE_SELECT_TARGETFIELD));
+        actions.add(new ActionCommand((Object o)->attack((Unit) o), "Attack", GameState.ATTACK_SELECT_TARGETFIELD));
     }
 }

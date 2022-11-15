@@ -3,9 +3,11 @@ package model.field;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
+import model.common.Unit;
 import model.extractors.Extractor;
 import model.map.Map;
 import model.map.Orientation;
+import model.player.Player;
 import model.trainers.Trainer;
 import model.warriors.Warrior;
 import model.workers.Worker;
@@ -20,6 +22,7 @@ import model.workers.Worker;
     private Trainer trainer;
     private final List<Worker> workers;
     private final List<Warrior> warriors;
+    private int movementCost = 0;
 
     
     public Field(Map map, Point pos, FieldType type){
@@ -42,10 +45,40 @@ import model.workers.Worker;
     public FieldType getType() { return type; }
     public int getVariant() { return variant; }
     
+    public boolean hasUnits(){
+        return extractor != null 
+               || trainer  != null
+               || !workers.isEmpty()
+               || !warriors.isEmpty();
+    }
+    
     public List<Worker> getWorkers() { return workers; }
     public List<Warrior> getWarriors() { return warriors; }
     public Extractor getExtractor() { return extractor; }
     public Trainer getTrainer() { return trainer; }
+    
+    public List<Unit> getUnits(){
+        LinkedList<Unit> unitList = new LinkedList<>();
+        if(extractor != null) unitList.add(extractor);
+        if(trainer != null) unitList.add(trainer);
+        unitList.addAll(workers);
+        unitList.addAll(warriors);
+        //for(Worker w : workers) unitList.add(w);
+        //for(Warrior w : warriors) unitList.add(w);
+        return unitList;
+    }
+    public Point getPos(){
+        return new Point(pos);
+    }
+    
+    public String getPosDisplay(){
+        return String.format("@(%d, %d)", pos.x,pos.y);
+    }
+    
+    public Player getOccupiedBy(){
+        return hasUnits() ? getUnits().get(0).getPlayer() : null;
+    }
+    
     public int getHighestRank() {
         int rank = 0;
         for(Warrior w: warriors)
@@ -72,6 +105,11 @@ import model.workers.Worker;
     public Field getFieldToSouth() { return getFieldToSouth(1); }
     public Field getFieldToEast() { return getFieldToEast(1); }
     public Field getFieldToWest() { return getFieldToWest(1); }
+
+    public Field getFieldToNorthEast() { return getFieldToNorth(1).getFieldToEast(1); }
+    public Field getFieldToSouthEast() { return getFieldToSouth(1).getFieldToEast(1); }
+    public Field getFieldToSouthWest() { return getFieldToSouth(1).getFieldToWest(1); }
+    public Field getFieldToNorthWest() { return getFieldToNorth(1).getFieldToWest(1); }
     
     public boolean isOnBorder() { return getFieldToNorth() == null || getFieldToSouth() == null || getFieldToEast() == null || getFieldToWest() == null; }
     
@@ -108,33 +146,52 @@ import model.workers.Worker;
         if(trainer != null) return trainer.toString();
         if(extractor != null) return extractor.toString();
         return "Empty";
-    }    
-    @Override
-    public String toString(){
-        return "(" + this.pos.x + ", " + this.pos.y + "): " + this.type + " (" + this.getOrientation() + ")";
-    
-    }
-    /*
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.pos);
-        return hash;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+    public int getMovementCost() { return movementCost; }
+    
+    public void setMovementCost(int c) { movementCost = c; }
+    
+    public List<Field> getNeighbours(boolean unitCanFly, Player player){
+        List<Field> neighbours = new LinkedList<>();
+        for(int i = -1;i <= 1; ++i){
+            for(int j = -1; j <= 1; ++j){
+                Field neighbour = map.getField(new Point(pos.x + i, pos.y + j));
+                if(neighbour != null &&
+                    (unitCanFly || (neighbour.isValidTarget(player)))){
+                    neighbours.add(neighbour);
+                }
+            }
         }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Field other = (Field) obj;
-        return Objects.equals(this.pos, other.pos);
+        return neighbours;
     }
- */   
+    
+    public List<Field> getNeighboursWithEnemies(Player player){
+        List<Field> neighbours = new LinkedList<>();
+        for(int i = -1;i <= 1; ++i){
+            for(int j = -1; j <= 1; ++j){
+                Field neighbour = map.getField(new Point(pos.x + i, pos.y + j));
+                if(neighbour != null &&
+                   neighbour.getOccupiedBy() != null &&
+                   !getOccupiedBy().equals(neighbour.getOccupiedBy())){
+                    neighbours.add(neighbour);
+                }
+            }
+        }
+        return neighbours;
+    }
+
+    public boolean isValidTarget(Player player){
+    
+    return type != FieldType.RIVER && type != FieldType.WALL  &&
+                                   (getOccupiedBy() == null ||
+                                    player.equals(getOccupiedBy()));
+    
+    }
+    
+    @Override
+    public String toString(){
+        return String.format("%s", type);
+    
+    }
 }

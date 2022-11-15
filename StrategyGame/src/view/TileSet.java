@@ -32,7 +32,7 @@ public class TileSet {
         CASTLE_2(0,16),BARRACKS_2(1,16),CAMP_2(2,16),UNIT_2(3,16),UNIT_SMALL_2(4,16),
         LEVEL_1(5,15),LEVEL_2(6,15),LEVEL_3(7,15),LEVEL_4(5,16),
         LEVEL_SMALL_1(7,14),LEVEL_SMALL_2(6,14),LEVEL_SMALL_3(7,16),LEVEL_SMALL_4(6,16),
-        SELECTION(5,14);
+        SELECTION(5,14),SELECTION_1(4,14);
 
         TileType(int x, int y) {
             this.x = x;
@@ -123,6 +123,10 @@ public class TileSet {
     }
     public static void drawSelection(int size, Point pos, Graphics2D g, JComponent c){
         drawTile(TileType.SELECTION,pos,size,g,c);
+    }
+
+    public static void drawTargetSelection(int size, Point pos, Graphics2D g, JComponent c){
+        drawTile(TileType.SELECTION_1,pos,size,g,c);
     }
     
     public static void drawCastle(int variant,int size, Point pos,Graphics2D g, JComponent c){

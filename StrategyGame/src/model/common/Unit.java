@@ -1,86 +1,96 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package model.common;
 
-import java.awt.Point;
+import commands.ActionCommand;
+import java.util.LinkedList;
 import java.util.List;
 import model.field.Field;
-import model.interfaces.ICommand;
 import model.player.Player;
 import model.interfaces.IMovable;
+import static model.common.UnitState.*;
 
 /**
  *
  * @author sonrisa
  */
 public abstract class Unit {
+
     protected final Player player;
+    protected Field position;
     protected UnitState state;
     protected int timer;
-    protected Field position;
     protected int health;
-    protected UnitType type;
-    protected List<ICommand> actions; 
+    protected List<ActionCommand> actions = new LinkedList<>();
     
-    protected Unit(int health, Field position, Player player){
+    protected Unit(int health, Field position, Player player) {
         this.health = health;
         this.position = position;
         this.player = player;
-        this.state = UnitState.BUSY;
+        this.state = BUSY;
     }
-    
-    public List<ICommand> getActions() throws NullPointerException {
-        if(this.actions == null){
-            throw new NullPointerException("Actions cannot be null. Probably the populate method was not called in the constructor.");
+
+    public final List<ActionCommand> getActions(){
+        //initActions();
+        return actions;
+    }
+ 
+    public final void initActions(){
+        for(ActionCommand a : actions) {
+            a.setTargetField(null);
+            a.setTargetUnit(null);
         }
-        
-        return this.actions;
     }
     
-    public int getHealth(){
+    public final int getHealth() {
         return this.health;
     }
-    
-    public Field getPosition(){
+
+    public final Field getPosition() {
         return this.position;
     }
-    
-    public Player getPlayer(){
+
+    public final Player getPlayer() {
         return this.player;
     }
-    
-    public UnitState getState(){
-        return this.state;
+
+    public final UnitState getState() {
+        return state;
     }
-    
-    public UnitType getType(){
-        return this.type;
+
+    public final String getStateWithTimer() {
+        return timer > 0
+                ? String.format("%s(%d)", state, timer)
+                : state.toString();
     }
-    
-    public void setTimer(int t){
+
+    public final String getType() {
+        return this.getClass().getSimpleName();
+    }
+
+    public final void setTimer(int t) {
         timer = t;
-        state = (state != UnitState.DEAD && timer == 0) ? UnitState.READY : UnitState.BUSY;
+        state = (state != DEAD && timer == 0) ? READY : BUSY;
     }
-    
-    public void decrementTimer(int t){
-        if(this.timer > 0) setTimer(this.timer-1);
+
+    public final void decrementTimer() {
+        if (this.timer > 0) {
+            setTimer(this.timer - 1);
+        }
     }
-    
-    public abstract void populateActions();
+
+    public boolean canStrikeBack(){
+        return false;
+    }
     
     public abstract void defend(IMovable m);
-    
-    public Stock cost() {
-        return (new Stock(getBaseCost())).multiply(getHPValue());
-    }
-    
-    protected abstract Stock getBaseCost();
-    public abstract int getHPValue();
-    
+
+    public abstract void remove();
+
+    public abstract void add();
+
+    public abstract String getStats();
+
     @Override
-    public String toString(){
-        return this.getClass().getSimpleName();
+    public String toString() {
+        return String.format("%s", this.getClass().getSimpleName());
     }
 }

@@ -1,14 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.trainers;
 
-
-import model.common.AttrLevel;
+import static model.Configuration.*;
+import commands.ActionCommand;
+import commands.IllegalCommandException;
+import model.GameState;
+import model.common.Stock;
 import model.player.Player;
-import model.common.UnitState;
-import model.common.UnitType;
 import model.field.Field;
 import model.warriors.Dragon;
 import model.warriors.Knight;
@@ -19,64 +16,48 @@ import model.warriors.Swordsman;
  *
  * @author sonrisa
  */
+public class Barracks extends Trainer {
 
-public class Barracks extends Trainer{
-    public static final AttrLevel HP = AttrLevel.MEDIUM;
-    
-    public Barracks(Field position, Player player) {
-        super(HP.getValue() * BASEHEALTH, position, player);
-        this.timer = HP.getValue();
-        type = UnitType.BARRACKS;
-    }
-   
-    @Override
-    public final int getHPValue() {
-        return HP.getValue();
-    }
-    
-    
-    public boolean canTrainPeasant() {
-        return true;
-    }
-    
-    
-    public boolean canTrainSwordsman() {
-        return true;
-    }
-    
-    
-    public boolean canTrainKnight() {
-        return true;
+    public final static Stock COST = calcMovableCost(BARRACKS_HP);
 
+    public static void create(Field position, Player player){
+        (new Barracks(position, player)).add();
     }
     
-   
-    public boolean canTrainDragon() {
-        return true;
-    }
-    
-    public Peasant trainPeasant() {
-        setTimer(Peasant.HP.getValue());
-        return new Peasant(position, player);
-    }
-    
-    public Swordsman trainSwordsman() {
-        setTimer(Swordsman.HP.getValue());
-        return new Swordsman(position, player);
-    }
-    
-    public Knight trainKnight() {
-        setTimer(Knight.HP.getValue());
-        return new Knight(position, player);
-    }
-    
-    public Dragon trainDragon() {
-        setTimer(Dragon.HP.getValue());
-        return new Dragon(position, player);
+    private Barracks(Field position, Player player) {
+        super(calcBuildingHealth(BARRACKS_HP), position, player);
+        this.timer = BARRACKS_HP.getValue();
+        populateActions();
     }
 
-    @Override
-    public void populateActions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void trainPeasant() throws IllegalCommandException {
+        player.getTreasury().decrease(Peasant.COST);
+        setTimer(PEASANT_HP.getValue());
+        Peasant.create(position, player);
+    }
+
+    public void trainSwordsman() throws IllegalCommandException {
+        player.getTreasury().decrease(Swordsman.COST);
+        setTimer(SWORDSMAN_HP.getValue());
+        Swordsman.create(position, player);
+    }
+
+    public void trainKnight() throws IllegalCommandException {
+        player.getTreasury().decrease(Knight.COST);
+        setTimer(KNIGHT_HP.getValue());
+        Knight.create(position, player);
+    }
+
+    public void trainDragon() throws IllegalCommandException {
+        player.getTreasury().decrease(Dragon.COST);
+        setTimer(DRAGON_HP.getValue());
+        Dragon.create(position, player);
+    }
+
+    public final void populateActions() {
+        actions.add(new ActionCommand((Object o)->trainPeasant(), "Train Peasant", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->trainSwordsman(), "Train Swordsman", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->trainKnight(), "Train Knigth", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->trainDragon(), "Train Dragon", GameState.EXECUTION));
     }
 }

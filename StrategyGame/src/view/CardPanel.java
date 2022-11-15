@@ -6,53 +6,49 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import javax.swing.JLabel;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import model.common.Unit;
+import model.field.Field;
+
 
 /**
  *
  * @author laszl
  */
+
 public class CardPanel extends JPanel{
-    JLabel header, body, footer;
     public CardPanel(){
+        super();
+        setVisible(false);
         setOpaque(true);
-        setBackground(new Color(0,0,0,16));
+        setBackground(new Color(253, 242, 231,223));
         setLayout(new BorderLayout());
-        this.header = new JLabel();
-        this.body = new JLabel();
-        this.footer = new JLabel();
-        this.header.setBorder(new EmptyBorder(10,10,10,10));
-        this.body.setBorder(new EmptyBorder(10,10,10,10));
-        this.footer.setBorder(new EmptyBorder(10,10,10,10));
-        this.header.setFont(new Font("Consolas", Font.PLAIN, 12));
-        this.body.setFont(new Font("Consolas", Font.PLAIN, 24));
-        this.footer.setFont(new Font("Consolas", Font.PLAIN, 12));
-        add(this.header,BorderLayout.PAGE_START);
-        add(this.body,BorderLayout.CENTER);
-        add(this.footer,BorderLayout.PAGE_END);
+        setBorder(new EmptyBorder(5,5,5,5));
     }
-    public CardPanel(String header,String body, String footer){
+    public CardPanel(JButton button){
         this();
-        update(header,body,footer);
+        //add((new JPanel().add(button)),BorderLayout.LINE_END);
+        add(button,BorderLayout.LINE_END);
     }
-    public final void update(String header,String body, String footer){
-
-        this.header.setText(header);
-        this.body.setText(body);
-        this.footer.setText(footer);
-        //.validate();
+    public CardPanel(Unit unit){
+        this();
+        
+        switch(unit.getState()){
+            case READY -> setBackground(new Color(0,255,0,63));
+            case BUSY -> setBackground(new Color(255,255,0,63));
+            default -> setBackground(new Color(0,0,0,32));
+        }
+            
+        add(new ProfilePanel(unit),BorderLayout.LINE_START);
     }
-    /*
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(getParent().getHeight()/2, getParent().getHeight()/4);
-    } 
-    */
-
+    
+    public CardPanel(Field field){
+        this();
+       
+        add(new ProfilePanel(field),BorderLayout.LINE_START);
+    }
 }
 
 

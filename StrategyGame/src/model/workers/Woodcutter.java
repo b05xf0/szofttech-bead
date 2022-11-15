@@ -1,15 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.workers;
 
-import model.common.UnitType;
+import static model.Configuration.*;
+import commands.ActionCommand;
+import commands.IllegalCommandException;
+import java.util.LinkedList;
+import java.util.List;
+import model.GameState;
+import model.common.Unit;
+import model.common.UnitState;
 import model.field.FieldType;
 import model.extractors.Hut;
 import model.field.Field;
 import model.player.Player;
-
 
 /**
  *
@@ -17,23 +19,37 @@ import model.player.Player;
  */
 public class Woodcutter extends Worker {
 
-    public Woodcutter(Field position, Player player) {
+    public static void create(Field position, Player player){
+        (new Woodcutter(position, player)).add();
+    }    
+    
+    private Woodcutter(Field position, Player player) {
         super(position, player);
-        type = UnitType.WOODCUTTER;
-    }
-    
-    @Override
-    public boolean canCut(){
-        return position.getType() == FieldType.FOREST;
-    }
-    
-    public Hut buildHut(){
-        setTimer(Hut.HP.getValue());
-        return new Hut(position, player);
+        populateActions();
     }
 
     @Override
-    public void populateActions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean canCut() {
+        return position.getType() == FieldType.FOREST
+                && state == UnitState.READY;
     }
+
+    public void buildHut() throws IllegalCommandException {
+        if (canCut() && canBuild()) {
+            player.getTreasury().decrease(Hut.COST);
+            setTimer(EXTRACTOR_HP.getValue());
+            Hut.create(position, player);
+        } else {
+            throw new IllegalCommandException(GameState.ERR_CANNOT_BUILD);
+        }
+    }
+    
+    public final void populateActions() {
+        actions.add(new ActionCommand((Object o)->buildHut(), "Build Hut", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->buildCastle(), "Build Castle", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->buildBarracks(), "Build Barracks", GameState.EXECUTION));
+        actions.add(new ActionCommand((Object o)->move((Field)o), "Move", GameState.MOVE_SELECT_TARGETFIELD));
+        actions.add(new ActionCommand((Object o)->attack((Unit) o), "Attack", GameState.ATTACK_SELECT_TARGETFIELD));
+    }
+
 }

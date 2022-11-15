@@ -1,11 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.warriors;
 
+import static model.Configuration.*;
 import model.common.AttrLevel;
-import model.common.UnitType;
+import model.common.Stock;
 import model.field.Field;
 import model.interfaces.IMovable;
 import model.player.Player;
@@ -16,42 +13,32 @@ import model.player.Player;
  */
 public class Peasant extends Warrior implements IMovable {
 
-    public static final AttrLevel HP = AttrLevel.LOW;
-    public static final AttrLevel ATTACK = AttrLevel.LOW;
-    public static final AttrLevel DEFENCE = AttrLevel.LOWEST;
-    public static final AttrLevel MOVEMENT = AttrLevel.MEDIUM;   
+    public final static Stock COST = calcMovableCost(PEASANT_HP);
+
+    public static void create(Field position, Player player){
+        (new Peasant(position, player)).add();
+    }
     
-    public Peasant(Field position, Player player) {
-        super(HP.getValue() * BASEHEALTH, position, player);
-        this.timer = HP.getValue();
-        type = UnitType.PEASANT;
-    }
-
-    @Override
-    public int getHPValue() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public int getAttackValue() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public int getDefenceValue(){
-        return DEFENCE.getValue();
+    private Peasant(Field position, Player player) {
+        super(calcMovableHealth(PEASANT_HP), position, player);
+        this.timer = PEASANT_HP.getValue();
     }
     
     @Override
-    public int getMovementCost() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public AttrLevel getAttack(){
+        return PEASANT_A;
     }
-    
+
+    @Override
+    public AttrLevel getDefence(){
+        return PEASANT_D;
+    }
+
+    @Override
+    public AttrLevel getMovement(){
+        return PEASANT_M;
+    }        
     @Override
     public int getRank(){return 1;}
 
-    @Override
-    public void populateActions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }
