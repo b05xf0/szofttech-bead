@@ -40,5 +40,10 @@ public class Peasant extends Warrior implements IMovable {
     }        
     @Override
     public int getRank(){return 1;}
+    
+    @Override
+    public final int getHP() {
+        return calcMovableHealth(PEASANT_HP);
+    }
 
 }

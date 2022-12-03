@@ -58,4 +58,9 @@ public class Castle extends Trainer {
         actions.add(new ActionCommand((Object o)->trainWoodcutter(), "Train Woodcutter", GameState.EXECUTION));
         actions.add(new ActionCommand((Object o)->trainFarmer(), "Train Farmer", GameState.EXECUTION));
     }
+    
+    @Override
+    public final int getHP() {
+        return calcBuildingHealth(CASTLE_HP);
+    }
 }

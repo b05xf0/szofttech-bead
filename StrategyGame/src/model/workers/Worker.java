@@ -62,10 +62,11 @@ public abstract class Worker extends Unit implements IMovable {
     @Override
     public final void move(Field targetField) throws IllegalCommandException {
         player.decreaseAPs(targetField.getMovementCost());
-        this.setTimer(1);
         this.position.removeUnit(this);
         this.position = targetField;
         this.position.addUnit(this);
+        if((canMine() || canCut() || canFarm()) && targetField.getExtractor() != null)
+            this.setTimer(1);
     }
 
     @Override
@@ -172,6 +173,11 @@ public abstract class Worker extends Unit implements IMovable {
     public final void add() {
         this.position.addUnit(this);
         this.player.addUnit(this);
+    }
+    
+    @Override
+    public final int getHP() {
+        return calcMovableHealth(WORKER_HP);
     }
 
 }

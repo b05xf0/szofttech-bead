@@ -56,4 +56,9 @@ public abstract class Extractor extends Unit {
         this.position.addUnit(this);
         this.player.addUnit(this);
     }
+    
+    @Override
+    public final int getHP() {
+        return calcBuildingHealth(EXTRACTOR_HP);
+    }
 }

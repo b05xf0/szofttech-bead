@@ -44,6 +44,19 @@ public class Player {
     
     public Stock getTreasury() { return treasury; }
     
+    public String getInventory() {
+        return String.format("%s | Trainers: %d Extractors: %d Warriors: %d Workers: %d",
+                getTreasury().toString(),
+                this.trainers.size(),
+                this.extractors.size(),
+                this.warriors.size(),
+                this.workers.size());
+    }
+    
+    public boolean isAlive(){
+        return !(this.trainers.isEmpty() && this.workers.isEmpty());
+    }
+    
     public final void init(){
         this.extractors.clear();
         this.trainers.clear();
@@ -82,6 +95,10 @@ public class Player {
         for(Trainer t : trainers)
             if(t.isHQ()) return true;
         return false;
+    }
+    
+    public boolean hasUnits(){
+        return !getUnits().isEmpty();
     }
     
     public void setStrikeBack(boolean c){

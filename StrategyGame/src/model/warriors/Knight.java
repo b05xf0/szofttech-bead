@@ -40,5 +40,10 @@ public class Knight extends Warrior implements IMovable {
     }        
     @Override
     public int getRank(){return 3;}
+    
+    @Override
+    public final int getHP() {
+        return calcMovableHealth(KNIGHT_HP);
+    }
 
 }

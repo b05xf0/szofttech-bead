@@ -14,7 +14,7 @@ import static model.common.UnitState.*;
  */
 public abstract class Unit {
 
-    protected final Player player;
+    protected Player player;
     protected Field position;
     protected UnitState state;
     protected int timer;
@@ -81,6 +81,12 @@ public abstract class Unit {
         return false;
     }
     
+    public void changePlayer(Player player) {
+        this.remove();
+        this.player = player;
+        this.add();
+    }
+    
     public abstract void defend(IMovable m);
 
     public abstract void remove();
@@ -88,6 +94,8 @@ public abstract class Unit {
     public abstract void add();
 
     public abstract String getStats();
+    
+    public abstract int getHP();
 
     @Override
     public String toString() {

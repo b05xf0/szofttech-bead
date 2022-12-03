@@ -194,7 +194,25 @@ public class GameManager {
         switchPlayer();
         players[0].setStrikeBack(playerIdx == 1);
         players[1].setStrikeBack(playerIdx == 0);
-        selectField(getCurrentPlayer().getUnits().get(0).getPosition().getPos());
+        if (players[0].isAlive() && players[1].isAlive()){
+            selectField(getCurrentPlayer().getUnits().get(0).getPosition().getPos());
+        } else {
+            state = GameState.OVER;
+        }
+    }
+    
+    public Player getWinner(){
+        if (state == GameState.OVER) {
+            return players[0].isAlive() ? players[0] : players[1]; 
+        } else {
+            return null;
+        }
+    }
+    
+    public void allYourBaseAreBelongToUs(){
+        for (Unit u :  players[playerIdx == 1 ? 0 : 1].getUnits()){
+           u.changePlayer(players[playerIdx]);
+        }
     }
 
     @Override

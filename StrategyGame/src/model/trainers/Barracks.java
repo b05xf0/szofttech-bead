@@ -60,4 +60,9 @@ public class Barracks extends Trainer {
         actions.add(new ActionCommand((Object o)->trainKnight(), "Train Knigth", GameState.EXECUTION));
         actions.add(new ActionCommand((Object o)->trainDragon(), "Train Dragon", GameState.EXECUTION));
     }
+    
+    @Override
+    public final int getHP() {
+        return calcBuildingHealth(BARRACKS_HP);
+    }
 }

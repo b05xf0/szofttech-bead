@@ -45,5 +45,10 @@ public class Dragon extends Warrior implements IMovable {
     
     @Override
     public int getRank(){return 4;}
+    
+    @Override
+    public final int getHP() {
+        return calcMovableHealth(DRAGON_HP);
+    }
 
 }

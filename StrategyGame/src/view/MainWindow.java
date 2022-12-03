@@ -11,6 +11,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -101,6 +103,7 @@ public class MainWindow extends JFrame {
                 
         });
 
+
         endTurnButton.addActionListener((ActionEvent e) -> {
             game.endTurn();
             updateWindow();
@@ -168,6 +171,7 @@ public class MainWindow extends JFrame {
             case MOVE_SELECT_TARGETFIELD, ATTACK_SELECT_TARGETFIELD -> updateActionsPanel();
             case SELECT_TARGETUNIT -> updateTargetUnitsPanel();
             case EXECUTION -> {if(game.getSelectedTargetUnit()!=null) updateTargetUnitsPanel(); else updateActionsPanel();}
+            case OVER -> {ctrl.setVisible(true);showResult();}
             default -> updateActionsPanel();
         }
         ctrl.setVisible(true);
@@ -227,7 +231,7 @@ public class MainWindow extends JFrame {
         Player p = game.getCurrentPlayer();
         playerInfo.setText(game.getCurrentPlayer().toString());
         gameInfo.setText(game.toString());
-        treasuryInfo.setText(game.getCurrentPlayer().getTreasury().toString());
+        treasuryInfo.setText(game.getCurrentPlayer().getInventory());
         playerPanel.setVisible(true);
         updateCommandPanel();
     }
@@ -237,7 +241,7 @@ public class MainWindow extends JFrame {
         units.removeAll();
         for(Unit u : game.getSelectedField().getUnits()){
             CardPanel card = new CardPanel(u);
-            card.add(new InfoLabel(LabelSize.S,String.format("Health: %d",u.getHealth())),BorderLayout.PAGE_START);
+            card.add(new InfoLabel(LabelSize.S,String.format("Health: %d / %d",u.getHealth(),u.getHP())),BorderLayout.PAGE_START);
             card.add(new InfoLabel(LabelSize.M,u.toString()),BorderLayout.CENTER);
             card.add(new InfoLabel(LabelSize.S,u.getStateWithTimer()),BorderLayout.PAGE_END);
             card.setToolTipText(u.getStats());
@@ -290,7 +294,7 @@ public class MainWindow extends JFrame {
         targetUnits.removeAll();
         for(Unit u : game.getSelectedTargetField().getUnits()){
             CardPanel card = new CardPanel(u);
-            card.add(new InfoLabel(LabelSize.S,String.format("Health: %d",u.getHealth())),BorderLayout.PAGE_START);
+            card.add(new InfoLabel(LabelSize.S,String.format("Health: %d / %d",u.getHealth(),u.getHP())),BorderLayout.PAGE_START);
             card.add(new InfoLabel(LabelSize.M,u.toString()),BorderLayout.CENTER);
             card.add(new InfoLabel(LabelSize.S,u.getStateWithTimer()),BorderLayout.PAGE_END);
             card.setToolTipText(u.getStats());
@@ -312,9 +316,16 @@ public class MainWindow extends JFrame {
         targetUnitsPanel.setVisible(true);
     }    
 
+    private void showResult() {
+        JOptionPane.showMessageDialog(ctrl,
+                game.getWinner().getName() + " won the game",
+                "Result",
+                JOptionPane.INFORMATION_MESSAGE);
+        startGame();
+    }
     
     private void showExitConfirmation() {
-        int n = JOptionPane.showConfirmDialog(this,
+        int n = JOptionPane.showConfirmDialog(ctrl,
                 "Do you really want to exit?",
                 "Exit confirmation",
                 JOptionPane.YES_NO_OPTION);
@@ -323,8 +334,20 @@ public class MainWindow extends JFrame {
         }
     }
 
+    private void showCheatConfirmation() {
+        int n = JOptionPane.showConfirmDialog(ctrl,
+                "Do you really want to cheat?",
+                "Cheat confirmation",
+                JOptionPane.YES_NO_OPTION);
+        if (n == JOptionPane.YES_OPTION) {
+            game.allYourBaseAreBelongToUs();
+            updateWindow();
+            
+        }
+    }    
+    
     public void showNewGameConfirmation() {
-        int n = JOptionPane.showConfirmDialog(this,
+        int n = JOptionPane.showConfirmDialog(ctrl,
                 "Do you really want to start a new game?",
                 " confirmation",
                 JOptionPane.YES_NO_OPTION);
@@ -348,7 +371,7 @@ public class MainWindow extends JFrame {
         nameInput2.setText(game.getPlayer(1).getName());
 
         while ("".equals(name1) || "".equals(name2) || name1.equals(name2)) {
-            JOptionPane.showMessageDialog(this, panel, "Enter names", JOptionPane.QUESTION_MESSAGE);
+            JOptionPane.showMessageDialog(ctrl, panel, "Enter names", JOptionPane.QUESTION_MESSAGE);
             name1 = nameInput1.getText();
             name2 = nameInput2.getText();
         }
@@ -378,8 +401,17 @@ public class MainWindow extends JFrame {
                 showExitConfirmation();
             }
         });
+        
+        JMenuItem menuCheatMode = new JMenuItem(new AbstractAction("Cheat Mode") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showCheatConfirmation();
+            }
+        });
+
         menuGame.add(menuNewGame);
         menuGame.add(menuGameExit);
+        menuGame.add(menuCheatMode);
         menuBar.add(menuGame);
         return menuBar;
     }

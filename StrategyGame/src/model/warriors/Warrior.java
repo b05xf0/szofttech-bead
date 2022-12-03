@@ -27,7 +27,7 @@ public abstract class Warrior extends Unit implements IMovable {
     @Override
     public final void move(Field targetField) throws IllegalCommandException {
         player.decreaseAPs(targetField.getMovementCost());
-        this.setTimer(1);
+        //this.setTimer(1);
         this.position.removeUnit(this);
         this.position = targetField;
         this.position.addUnit(this);

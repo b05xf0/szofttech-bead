@@ -41,5 +41,10 @@ public class Swordsman extends Warrior implements IMovable {
 
     @Override
     public int getRank(){return 2;}
+    
+    @Override
+    public final int getHP() {
+        return calcMovableHealth(SWORDSMAN_HP);
+    }
 
 }
