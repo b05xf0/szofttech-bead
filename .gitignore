@@ -4,3 +4,6 @@
 .DS_Store
 /StrategyGame/nbproject/private/
 /StrategyGame/build/
+StrategyGame/dist
+/mavenproject2/target/
+/mavenproject2/nbproject/
