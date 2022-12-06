@@ -75,6 +75,6 @@ public class WarriorsTest {
         int dragon2HealthAfter = dragon2.getHealth();
         
         //Then
-        assertTrue(dragon2HealthBefore < dragon2HealthAfter);
+        assertTrue(dragon2HealthBefore > dragon2HealthAfter);
     }
 }
