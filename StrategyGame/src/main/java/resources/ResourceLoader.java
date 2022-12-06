@@ -12,7 +12,7 @@ public class ResourceLoader {
     }
     
     public static Image loadImage(String resName){
-        URL url = ResourceLoader.class.getResource(resName);
+        URL url = ResourceLoader.class.getClassLoader().getResource(resName);
           try {return ImageIO.read(url); }
         catch(IOException e){ return null;}
     }
