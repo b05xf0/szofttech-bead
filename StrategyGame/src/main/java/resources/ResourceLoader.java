@@ -15,6 +15,5 @@ public class ResourceLoader {
         URL url = ResourceLoader.class.getClassLoader().getResource(resName);
           try {return ImageIO.read(url); }
         catch(IOException e){ return null;}
-       
     }
 }
