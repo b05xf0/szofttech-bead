@@ -62,43 +62,52 @@ public class WorkersTest {
     
     @Test
     public void testFarmerCanBuildFarmOnGrass() throws IllegalCommandException {
+        //Given
         Farmer.create(_grassField, _player1);
         
         Unit farmer = _map.getField(_grassField.getPos()).getUnits().get(0);
         farmer.setTimer(0);
         
+        //When
         farmer.getActions().get(0).execute();
         
         Extractor farm = _map.getField(_grassField.getPos()).getExtractor();
         
+        //Then
         assertNotNull(farm);
     }
     
     @Test
     public void testMinerCanBuildMineOnGold() throws IllegalCommandException {
+        //Given
         Miner.create(_goldField, _player1);
         
         Unit miner = _map.getField(_goldField.getPos()).getUnits().get(0);
         miner.setTimer(0);
         
+        //When
         miner.getActions().get(0).execute();
         
         Extractor mine = _map.getField(_goldField.getPos()).getExtractor();
         
+        //Then
         assertNotNull(mine);
     }
     
     @Test
     public void testWoodcutterCanBuildHutInForest() throws IllegalCommandException {
+        //Given
         Woodcutter.create(_forestField, _player1);
         
         Unit woodCutter = _map.getField(_forestField.getPos()).getUnits().get(0);
         woodCutter.setTimer(0);
         
+        //When
         woodCutter.getActions().get(0).execute();
         
         Extractor hut = _map.getField(_forestField.getPos()).getExtractor();
         
+        //Then
         assertNotNull(hut);
     }
 }

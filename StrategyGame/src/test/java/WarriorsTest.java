@@ -58,6 +58,7 @@ public class WarriorsTest {
 
     @Test
     public void testDragonsFight() throws IllegalCommandException{
+        //Given
         Dragon.create(_field1, _player1);
         Dragon.create(_field2, _player2);
         
@@ -66,8 +67,14 @@ public class WarriorsTest {
         
         dragon1.setTimer(0);
         
+        int dragon2HealthBefore = dragon2.getHealth();
+        
+        //When
         dragon1.attack(dragon2);
         
-        assertTrue(dragon2.getHealth() < dragon1.getHealth());
+        int dragon2HealthAfter = dragon2.getHealth();
+        
+        //Then
+        assertTrue(dragon2HealthBefore < dragon2HealthAfter);
     }
 }

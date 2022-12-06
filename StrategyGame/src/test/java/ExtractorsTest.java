@@ -62,6 +62,7 @@ public class ExtractorsTest {
     
     @Test
     public void testFarmProducesFood() throws IllegalCommandException {
+        //Given
         Farmer.create(_grassField, _player1);
         
         Unit farmer = _map.getField(_grassField.getPos()).getUnits().get(0);
@@ -74,15 +75,19 @@ public class ExtractorsTest {
         int foodBefore = _player1.getTreasury().getFood();
         
         farmer.setTimer(0);
+        
+        //When
         farm.extract();
         
         int foodAfter = _player1.getTreasury().getFood();
         
+        //Then
         assertTrue(foodBefore < foodAfter);
     }
     
     @Test
     public void testMineProducesGold() throws IllegalCommandException {
+        //Given
         Miner.create(_goldField, _player1);
         
         Unit miner = _map.getField(_goldField.getPos()).getUnits().get(0);
@@ -95,15 +100,19 @@ public class ExtractorsTest {
         int goldBefore = _player1.getTreasury().getGold();
         
         miner.setTimer(0);
+        
+        //When
         mine.extract();
         
         int goldAfter = _player1.getTreasury().getGold();
         
+        //Then
         assertTrue(goldBefore < goldAfter);
     }
 
     @Test
     public void testHutProducesWood() throws IllegalCommandException {
+        //Given
         Woodcutter.create(_forestField, _player1);
         
         Unit woodCutter = _map.getField(_forestField.getPos()).getUnits().get(0);
@@ -116,10 +125,13 @@ public class ExtractorsTest {
         int lumberBefore = _player1.getTreasury().getLumber();
         
         woodCutter.setTimer(0);
+        
+        //When
         hut.extract();
         
         int lumberAfter = _player1.getTreasury().getLumber();
         
+        //Then
         assertTrue(lumberBefore < lumberAfter);
     }
 }
