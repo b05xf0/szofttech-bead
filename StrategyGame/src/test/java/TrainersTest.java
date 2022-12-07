@@ -14,6 +14,7 @@ import model.player.Player;
 import model.trainers.Barracks;
 import model.trainers.Castle;
 import model.trainers.Trainer;
+import model.warriors.Dragon;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +55,7 @@ public class TrainersTest {
     }
     
     @Test
-    public void testCanTrainPeasant() throws IllegalCommandException{
+    public void testBarrackCanTrainPeasant() throws IllegalCommandException{
         //Given
         Barracks.create(_field1, _player1);
         Barracks barrack = (Barracks)_field1.getTrainer();
@@ -69,7 +70,7 @@ public class TrainersTest {
     }
     
     @Test
-    public void testCanTrainSwordsman() throws IllegalCommandException{
+    public void testBarrackCanTrainSwordsman() throws IllegalCommandException{
         //Given
         Barracks.create(_field1, _player1);
         Barracks barrack = (Barracks)_field1.getTrainer();
@@ -84,7 +85,7 @@ public class TrainersTest {
     }
     
     @Test
-    public void testCanTrainKnight() throws IllegalCommandException{
+    public void testBarrackCanTrainKnight() throws IllegalCommandException{
         //Given
         Barracks.create(_field1, _player1);
         Barracks barrack = (Barracks)_field1.getTrainer();
@@ -99,7 +100,7 @@ public class TrainersTest {
     }
     
     @Test
-    public void testCanTrainDragon() throws IllegalCommandException{
+    public void testBarrackCanTrainDragon() throws IllegalCommandException{
         //Given
         Barracks.create(_field1, _player1);
         Barracks barrack = (Barracks)_field1.getTrainer();
@@ -111,5 +112,50 @@ public class TrainersTest {
        
         //Then
         assertNotNull(dragon);
+    }
+    
+    @Test
+    public void testCastleCanTrainFarmer() throws IllegalCommandException{
+        //Given
+        Castle.create(_field1, _player1);
+        Castle castle = (Castle)_field1.getTrainer();
+        castle.setTimer(0);
+        
+       //When
+        castle.trainFarmer();  
+        Unit farmer = _map.getField(_field1.getPos()).getUnits().get(0);
+       
+        //Then
+        assertNotNull(farmer);
+    }
+    
+    @Test
+    public void testCastleCanTrainWoodcutter() throws IllegalCommandException{
+        //Given
+        Castle.create(_field1, _player1);
+        Castle castle = (Castle)_field1.getTrainer();
+        castle.setTimer(0);
+        
+       //When
+        castle.trainWoodcutter();  
+        Unit woodCutter = _map.getField(_field1.getPos()).getUnits().get(0);
+       
+        //Then
+        assertNotNull(woodCutter);
+    }
+    
+    @Test
+    public void testCastleCanTrainMiner() throws IllegalCommandException{
+        //Given
+        Castle.create(_field1, _player1);
+        Castle castle = (Castle)_field1.getTrainer();
+        castle.setTimer(0);
+        
+       //When
+        castle.trainMiner();  
+        Unit miner = _map.getField(_field1.getPos()).getUnits().get(0);
+       
+        //Then
+        assertNotNull(miner);
     }
 }

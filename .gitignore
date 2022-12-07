@@ -27,3 +27,5 @@ StrategyGame/target/classes/resources/ResourceLoader.java
 StrategyGame/target/classes/resources/ResourceLoader.class
 /StrategyGame/nbproject/
 StrategyGame/target/surefire-reports
+StrategyGame/target/maven-archiver
+*.jar
