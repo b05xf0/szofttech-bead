@@ -63,7 +63,7 @@ public class WarriorsTest {
         Dragon.create(_field2, _player2);
         
         Warrior dragon1 = _field1.getWarriors().get(0);
-        Unit dragon2 = _field2.getWarriors().get(0);
+        Warrior dragon2 = _field2.getWarriors().get(0);
         
         dragon1.setTimer(0);
         
@@ -75,6 +75,6 @@ public class WarriorsTest {
         int dragon2HealthAfter = dragon2.getHealth();
         
         //Then
-        assertTrue(dragon2HealthBefore < dragon2HealthAfter);
+        assertTrue(dragon2HealthBefore > dragon2HealthAfter);
     }
 }
