@@ -52,7 +52,8 @@ public class TrainersTest {
     @AfterEach
     public void tearDown() {
     }
-
+    
+    @Test
     public void testCanTrainPeasant() throws IllegalCommandException{
         //Given
         Barracks.create(_field1, _player1);
@@ -65,5 +66,50 @@ public class TrainersTest {
        
         //Then
         assertNotNull(peasant);
+    }
+    
+    @Test
+    public void testCanTrainSwordsman() throws IllegalCommandException{
+        //Given
+        Barracks.create(_field1, _player1);
+        Barracks barrack = (Barracks)_field1.getTrainer();
+        barrack.setTimer(0);
+        
+       //When
+        barrack.trainSwordsman();  
+        Unit swordsman = _map.getField(_field1.getPos()).getUnits().get(0);
+       
+        //Then
+        assertNotNull(swordsman);
+    }
+    
+    @Test
+    public void testCanTrainKnight() throws IllegalCommandException{
+        //Given
+        Barracks.create(_field1, _player1);
+        Barracks barrack = (Barracks)_field1.getTrainer();
+        barrack.setTimer(0);
+        
+       //When
+        barrack.trainKnight();  
+        Unit knight = _map.getField(_field1.getPos()).getUnits().get(0);
+       
+        //Then
+        assertNotNull(knight);
+    }
+    
+    @Test
+    public void testCanTrainDragon() throws IllegalCommandException{
+        //Given
+        Barracks.create(_field1, _player1);
+        Barracks barrack = (Barracks)_field1.getTrainer();
+        barrack.setTimer(0);
+        
+       //When
+        barrack.trainDragon();  
+        Unit dragon = _map.getField(_field1.getPos()).getUnits().get(0);
+       
+        //Then
+        assertNotNull(dragon);
     }
 }
